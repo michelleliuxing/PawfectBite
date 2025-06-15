@@ -107,8 +107,17 @@ class ApiService {
      * @throws {Error} If validation fails or API request fails
      */
     async createPet(petData: PetFormData): Promise<Pet> {
-        const response: AxiosResponse<Pet> = await this.api.post('/pets', petData);
-        return response.data;
+        // Backend returns only the pet ID, not the full pet object
+        const response: AxiosResponse<string> = await this.api.post('/pets', petData);
+        const petId = response.data;
+
+        // Return the pet data with the generated ID
+        return {
+            id: petId,
+            ...petData,
+            healthIssues: petData.healthIssues || 'None',
+            imageUrl: petData.imageUrl || ''
+        } as Pet;
     }
 
     /**
@@ -116,12 +125,21 @@ class ApiService {
      * 
      * @param {string} id - The ID of the pet to update
      * @param {Partial<PetFormData>} petData - The partial pet data to update
-     * @returns {Promise<Pet>} The updated pet object
+     * @returns {Promise<Pet>} The updated pet object (constructed from request data since backend returns NoContent)
      * @throws {Error} If pet not found or API request fails
      */
     async updatePet(id: string, petData: Partial<PetFormData>): Promise<Pet> {
-        const response: AxiosResponse<Pet> = await this.api.put('/pets', { ...petData, id });
-        return response.data;
+        // Backend expects the full pet object with ID in the body, not in URL
+        const petToUpdate = {
+            id: id,
+            ...petData
+        };
+
+        // Backend returns NoContent (204), so we don't get response data
+        await this.api.put('/pets', petToUpdate);
+
+        // Return the pet data we sent (since backend doesn't return the updated pet)
+        return petToUpdate as Pet;
     }
 
     /**

@@ -1,22 +1,40 @@
-import { Card, CardContent, Box, Typography, Chip, Button } from '@mui/material';
+import { Card, CardContent, Box, Typography, Chip, Button, IconButton, Tooltip } from '@mui/material';
 import { Pet } from '../../../shared/types';
 import CakeIcon from '@mui/icons-material/Cake';
 import ScaleIcon from '@mui/icons-material/Scale';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface PetCardProps {
     pet: Pet;
     onCreateRecipe?: (pet: Pet) => void;
+    onEdit?: (pet: Pet) => void;
+    onDelete?: (pet: Pet) => void;
 }
 
-export default function PetCard({ pet, onCreateRecipe }: PetCardProps) {
+export default function PetCard({ pet, onCreateRecipe, onEdit, onDelete }: PetCardProps) {
     const handleCreateRecipe = () => {
         if (onCreateRecipe) {
             onCreateRecipe(pet);
         } else {
             console.log(`Creating recipe for ${pet.name}`);
+        }
+    };
+
+    const handleEdit = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onEdit) {
+            onEdit(pet);
+        }
+    };
+
+    const handleDelete = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onDelete) {
+            onDelete(pet);
         }
     };
 
@@ -50,15 +68,82 @@ export default function PetCard({ pet, onCreateRecipe }: PetCardProps) {
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
+                position: 'relative',
                 '&:hover': {
                     transform: 'translateY(-8px)',
                     boxShadow: '0 16px 48px rgba(139, 69, 19, 0.2)',
-                    border: '2px solid rgba(210, 105, 30, 0.3)'
+                    border: '2px solid rgba(210, 105, 30, 0.3)',
+                    '& .pet-card-actions': {
+                        opacity: 1,
+                        transform: 'translateY(0)'
+                    }
                 }
             }}
         >
+            <Box
+                className="pet-card-actions"
+                sx={{
+                    position: 'absolute',
+                    top: 12,
+                    right: 12,
+                    display: 'flex',
+                    gap: 1,
+                    opacity: 0,
+                    transform: 'translateY(-10px)',
+                    transition: 'all 0.3s ease',
+                    zIndex: 2
+                }}
+            >
+                {onEdit && (
+                    <Tooltip title={`Edit ${pet.name} ✏️`} arrow>
+                        <IconButton
+                            onClick={handleEdit}
+                            size="small"
+                            sx={{
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                backdropFilter: 'blur(10px)',
+                                border: '1px solid rgba(210, 105, 30, 0.2)',
+                                color: '#D2691E',
+                                width: 36,
+                                height: 36,
+                                '&:hover': {
+                                    background: 'rgba(210, 105, 30, 0.1)',
+                                    transform: 'scale(1.1)',
+                                    boxShadow: '0 4px 12px rgba(210, 105, 30, 0.3)'
+                                }
+                            }}
+                        >
+                            <EditIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                )}
+
+                {onDelete && (
+                    <Tooltip title={`Delete ${pet.name} 🗑️`} arrow>
+                        <IconButton
+                            onClick={handleDelete}
+                            size="small"
+                            sx={{
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                backdropFilter: 'blur(10px)',
+                                border: '1px solid rgba(255, 87, 87, 0.2)',
+                                color: '#ff5757',
+                                width: 36,
+                                height: 36,
+                                '&:hover': {
+                                    background: 'rgba(255, 87, 87, 0.1)',
+                                    transform: 'scale(1.1)',
+                                    boxShadow: '0 4px 12px rgba(255, 87, 87, 0.3)'
+                                }
+                            }}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                )}
+            </Box>
+
             <CardContent sx={{ p: 4, flex: 1, display: 'flex', flexDirection: 'column' }}>
-                {/* Pet Header */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                     <Box
                         component="img"
@@ -94,7 +179,6 @@ export default function PetCard({ pet, onCreateRecipe }: PetCardProps) {
                     </Box>
                 </Box>
 
-                {/* Pet Details */}
                 <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
                     <Box sx={{
                         textAlign: 'center',
@@ -131,7 +215,6 @@ export default function PetCard({ pet, onCreateRecipe }: PetCardProps) {
                     </Box>
                 </Box>
 
-                {/* Activity & Health */}
                 <Box sx={{
                     p: 2.5,
                     borderRadius: 2,
@@ -176,7 +259,6 @@ export default function PetCard({ pet, onCreateRecipe }: PetCardProps) {
                     </Box>
                 </Box>
 
-                {/* Recipe Button */}
                 <Button
                     fullWidth
                     variant="contained"
