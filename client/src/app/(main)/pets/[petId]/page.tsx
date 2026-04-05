@@ -2,13 +2,13 @@
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, ArrowLeft } from "lucide-react";
 import { usePet, useDeletePet } from "@/lib/hooks/use-pets";
-import { PageHeader } from "@/components/layout/page-header";
 import { PetProfileSummary } from "@/components/pets/pet-profile-summary";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { ErrorAlert } from "@/components/shared/error-alert";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { motion } from "framer-motion";
 
 export default function PetDetailPage() {
   const params = useParams();
@@ -27,35 +27,57 @@ export default function PetDetailPage() {
   if (!pet) return null;
 
   return (
-    <div>
-      <PageHeader
-        title={pet.name}
-        description="Pet profile details"
-        action={
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/pets/${petId}/edit`}
-              className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
+    <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 ">
+        <div className="flex items-center gap-4">
+          <Link href="/pets">
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
+              className="w-12 h-12 bg-[#FFF9F2] rounded-full border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] flex items-center justify-center transition-all"
             >
-              <Pencil className="size-4" />
-              Edit
-            </Link>
-            <ConfirmDialog
-              trigger={
-                <button className="inline-flex items-center gap-2 rounded-lg border border-destructive/30 px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10">
-                  <Trash2 className="size-4" />
-                  Delete
-                </button>
-              }
-              title="Delete Pet"
-              description={`Are you sure you want to delete ${pet.name}? This action cannot be undone.`}
-              confirmLabel="Delete"
-              variant="destructive"
-              onConfirm={handleDelete}
-            />
+              <ArrowLeft className="w-6 h-6 text-[#4A3B32]" strokeWidth={3} />
+            </motion.div>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-black text-[#4A3B32]">{pet.name}&apos;s Profile</h1>
+            <p className="text-[#4A3B32]/60 font-bold">Manage your pet&apos;s details</p>
           </div>
-        }
-      />
+        </div>
+
+        <div className="flex items-center gap-4 w-full md:w-auto">
+          <Link href={`/pets/${petId}/edit`} className="flex-1 md:flex-none">
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
+              className="flex items-center justify-center gap-2 bg-[#F4D06F] text-[#4A3B32] px-6 py-3 rounded-full font-black border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-all"
+            >
+              <Pencil className="w-5 h-5" strokeWidth={3} />
+              Edit
+            </motion.div>
+          </Link>
+          
+          <ConfirmDialog
+            trigger={
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
+                className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-[#E88D72] text-white px-6 py-3 rounded-full font-black border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-all"
+              >
+                <Trash2 className="w-5 h-5" strokeWidth={3} />
+                Delete
+              </motion.button>
+            }
+            title="Delete Pet"
+            description={`Are you sure you want to delete ${pet.name}? This action cannot be undone.`}
+            confirmLabel="Delete"
+            variant="destructive"
+            onConfirm={handleDelete}
+          />
+        </div>
+      </div>
+
       <PetProfileSummary pet={pet} />
     </div>
   );

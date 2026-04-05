@@ -9,7 +9,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
     <div className="min-h-screen bg-[#FFF9F2] text-[#4A3B32] font-sans selection:bg-[#F7B2B7] selection:text-[#4A3B32] flex flex-col">
       <TokenSetter token={session?.accessToken ?? null} />
       <MainNavBar user={session?.user} />
-      <main className="flex-1 w-full max-w-5xl mx-auto px-6 py-8 md:py-12 flex flex-col">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-8 md:py-12 flex flex-col">
         {children}
       </main>
     </div>

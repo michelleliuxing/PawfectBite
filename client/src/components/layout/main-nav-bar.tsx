@@ -18,7 +18,7 @@ export function MainNavBar({ user }: { user?: User }) {
   ];
 
   return (
-    <header className="w-full max-w-5xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0 z-50 relative">
+    <header className="w-full max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0 z-50 relative">
       <Link href="/" className="flex items-center gap-3 group">
         <div className="relative w-12 h-12 rounded-2xl bg-white border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] overflow-hidden flex items-center justify-center p-1.5 group-hover:-translate-y-1 transition-transform">
           <Image 
