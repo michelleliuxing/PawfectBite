@@ -1,10 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Heart, ShieldCheck, Sparkles, Utensils, ArrowRight } from "lucide-react";
 
 export default function LandingPage() {
+  const { data: session, status } = useSession();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -54,13 +58,43 @@ export default function LandingPage() {
               PawfectBite
             </span>
           </div>
-          <motion.button 
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
-            className="hidden md:flex items-center gap-2 bg-[#F4D06F] text-[#4A3B32] px-6 py-3 rounded-full font-bold border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors hover:bg-[#F6DE96]"
-          >
-            Log In
-          </motion.button>
+          
+          {status === "loading" ? (
+            <div className="hidden md:block w-24 h-12 bg-[#4A3B32]/10 rounded-full animate-pulse" />
+          ) : session?.user ? (
+            <Link href="/pets">
+              <motion.div 
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
+                className="hidden md:flex items-center gap-3 bg-white text-[#4A3B32] px-2 py-2 pr-6 rounded-full font-bold border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors hover:bg-[#FFF9F2]"
+              >
+                {session.user.image ? (
+                  <Image 
+                    src={session.user.image} 
+                    alt={session.user.name || "User"} 
+                    width={32} 
+                    height={32} 
+                    className="rounded-full border-2 border-[#4A3B32]"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-[#F7B2B7] border-2 border-[#4A3B32] flex items-center justify-center">
+                    <span className="text-sm font-black text-white">{session.user.name?.[0] || "U"}</span>
+                  </div>
+                )}
+                <span>{session.user.name?.split(' ')[0] || "Profile"}</span>
+              </motion.div>
+            </Link>
+          ) : (
+            <Link href="/sign-in">
+              <motion.div 
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
+                className="hidden md:flex items-center gap-2 bg-[#F4D06F] text-[#4A3B32] px-6 py-3 rounded-full font-bold border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors hover:bg-[#F6DE96]"
+              >
+                Sign In
+              </motion.div>
+            </Link>
+          )}
         </motion.header>
 
         {/* Hero Section */}

@@ -30,9 +30,11 @@ public class AuthService {
 
     @Transactional
     public AuthResponse authenticateWithGoogle(String idToken) {
+        // 1. Verify the token securely with Google's servers to ensure it wasn't forged
         GoogleUserInfo googleUser = googleTokenVerifier.verify(idToken)
                 .orElseThrow(() -> new AppException("AUTH_FAILED", "Invalid Google ID token"));
 
+        // 2. Check the database: If the user exists, get them. If not, create a new account!
         User user = userService.getOrCreateByGoogle(
                 googleUser.email(),
                 googleUser.name(),
@@ -40,6 +42,7 @@ public class AuthService {
                 googleUser.googleId()
         );
 
+        // 3. Generate a custom JWT specifically for the PawfectBite backend
         String jwt = jwtService.generateToken(user.id(), user.email(), user.name());
 
         log.info("User authenticated: email={}", user.email());
