@@ -1,10 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import { Trash2Icon } from "lucide-react";
 import { useRecipes } from "@/lib/hooks/use-recipes";
 import { useCreateCalendarEntry, useDeleteCalendarEntry } from "@/lib/hooks/use-calendar";
-import { Trash2, X } from "lucide-react";
 import { formatDisplayDate } from "@/lib/utils/format";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import type { CalendarEntry } from "@/lib/types/calendar.types";
 
 interface CalendarEntryDialogProps {
@@ -27,60 +43,71 @@ export function CalendarEntryDialog({ petId, date, existingEntries, onClose }: C
     setSelectedRecipeId("");
   };
 
-  const selectClass = "rounded-md border bg-background px-3 py-2 text-sm outline-none ring-ring focus:ring-2";
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative z-50 mx-4 w-full max-w-md rounded-xl border bg-card p-6 shadow-lg">
-        <div className="flex items-center justify-between pb-4">
-          <h2 className="font-semibold">{formatDisplayDate(new Date(date + "T00:00:00"))}</h2>
-          <button onClick={onClose} className="rounded-md p-1 hover:bg-accent"><X className="size-4" /></button>
-        </div>
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>{formatDisplayDate(new Date(date + "T00:00:00"))}</DialogTitle>
+        </DialogHeader>
 
         {existingEntries.length > 0 && (
-          <div className="mb-4 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <h3 className="text-sm font-medium text-muted-foreground">Scheduled Meals</h3>
             {existingEntries.map((entry) => (
               <div key={entry.id} className="flex items-center justify-between rounded-lg border p-2.5">
                 <div>
                   <p className="text-sm font-medium">{entry.recipeTitle || "Recipe"}</p>
-                  <p className="text-xs text-muted-foreground capitalize">{entry.mealType}</p>
+                  <p className="text-xs capitalize text-muted-foreground">{entry.mealType}</p>
                 </div>
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-8 text-muted-foreground hover:text-destructive"
                   onClick={() => deleteEntry.mutateAsync(entry.id)}
-                  className="rounded-md p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                 >
-                  <Trash2 className="size-3.5" />
-                </button>
+                  <Trash2Icon className="size-3.5" />
+                </Button>
               </div>
             ))}
+            <Separator />
           </div>
         )}
 
-        <div className="flex flex-col gap-3 border-t pt-4">
+        <div className="flex flex-col gap-3">
           <h3 className="text-sm font-medium">Add Meal</h3>
-          <select value={selectedRecipeId} onChange={(e) => setSelectedRecipeId(e.target.value)} className={selectClass}>
-            <option value="">Select a recipe...</option>
-            {recipes?.map((r) => (
-              <option key={r.id} value={r.id}>{r.title}</option>
-            ))}
-          </select>
-          <select value={mealType} onChange={(e) => setMealType(e.target.value)} className={selectClass}>
-            <option value="breakfast">Breakfast</option>
-            <option value="lunch">Lunch</option>
-            <option value="dinner">Dinner</option>
-            <option value="snack">Snack</option>
-          </select>
-          <button
+          <Select value={selectedRecipeId} onValueChange={setSelectedRecipeId}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a recipe..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {recipes?.map((r) => (
+                  <SelectItem key={r.id} value={r.id}>{r.title}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Select value={mealType} onValueChange={setMealType}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="breakfast">Breakfast</SelectItem>
+                <SelectItem value="lunch">Lunch</SelectItem>
+                <SelectItem value="dinner">Dinner</SelectItem>
+                <SelectItem value="snack">Snack</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Button
             onClick={handleAdd}
             disabled={!selectedRecipeId || createEntry.isPending}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
           >
             {createEntry.isPending ? "Adding..." : "Add to Calendar"}
-          </button>
+          </Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { format } from "date-fns";
 import {
   getMonthString,
@@ -13,6 +13,9 @@ import {
   formatDate,
 } from "@/lib/utils/format";
 import { useCalendarEntries } from "@/lib/hooks/use-calendar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import type { CalendarEntry } from "@/lib/types/calendar.types";
 
 interface CalendarGridProps {
@@ -36,15 +39,23 @@ export function CalendarGrid({ petId, onDayClick }: CalendarGridProps) {
   };
 
   return (
-    <div className="rounded-xl border bg-card">
+    <Card className="overflow-hidden">
       <div className="flex items-center justify-between border-b p-4">
-        <button onClick={() => setCurrentMonth(prevMonth(currentMonth))} className="rounded-md p-1.5 hover:bg-accent">
-          <ChevronLeft className="size-5" />
-        </button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setCurrentMonth(prevMonth(currentMonth))}
+        >
+          <ChevronLeftIcon className="size-5" />
+        </Button>
         <h3 className="font-medium">{getMonthLabel(currentMonth)}</h3>
-        <button onClick={() => setCurrentMonth(nextMonth(currentMonth))} className="rounded-md p-1.5 hover:bg-accent">
-          <ChevronRight className="size-5" />
-        </button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setCurrentMonth(nextMonth(currentMonth))}
+        >
+          <ChevronRightIcon className="size-5" />
+        </Button>
       </div>
 
       <div className="grid grid-cols-7">
@@ -65,7 +76,12 @@ export function CalendarGrid({ petId, onDayClick }: CalendarGridProps) {
               onClick={() => onDayClick(formatDate(date), dayEntries)}
               className="min-h-[80px] border-b border-r p-1 text-left transition-colors hover:bg-accent/30"
             >
-              <span className={`inline-flex size-6 items-center justify-center rounded-full text-xs ${isToday ? "bg-primary text-primary-foreground font-bold" : ""}`}>
+              <span
+                className={cn(
+                  "inline-flex size-6 items-center justify-center rounded-full text-xs",
+                  isToday && "bg-primary font-bold text-primary-foreground"
+                )}
+              >
                 {format(date, "d")}
               </span>
               {dayEntries.length > 0 && (
@@ -84,6 +100,6 @@ export function CalendarGrid({ petId, onDayClick }: CalendarGridProps) {
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }

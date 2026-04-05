@@ -1,6 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { XIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface StepPreferencesProps {
   onSubmit: (prefs: {
@@ -35,61 +40,114 @@ export function StepPreferences({ onSubmit, isLoading, onBack }: StepPreferences
     setter(list.filter((_, i) => i !== index));
   };
 
-  const inputClass = "rounded-md border bg-background px-3 py-2 text-sm outline-none ring-ring focus:ring-2";
-
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium">Goal</label>
-        <input value={goal} onChange={(e) => setGoal(e.target.value)} className={inputClass} placeholder="e.g. Weight management, high protein, sensitive stomach" />
+        <Label>Goal</Label>
+        <Input
+          value={goal}
+          onChange={(e) => setGoal(e.target.value)}
+          placeholder="e.g. Weight management, high protein, sensitive stomach"
+        />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium">Ingredients to Include</label>
+        <Label>Ingredients to Include</Label>
         <div className="flex gap-2">
-          <input value={includeInput} onChange={(e) => setIncludeInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(includeInput, includes, setIncludes, setIncludeInput); } }} className={inputClass + " flex-1"} placeholder="e.g. chicken, rice..." />
-          <button type="button" onClick={() => addTag(includeInput, includes, setIncludes, setIncludeInput)} className="rounded-md bg-secondary px-3 py-2 text-sm font-medium">Add</button>
+          <Input
+            value={includeInput}
+            onChange={(e) => setIncludeInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addTag(includeInput, includes, setIncludes, setIncludeInput);
+              }
+            }}
+            className="flex-1"
+            placeholder="e.g. chicken, rice..."
+          />
+          <Button type="button" variant="secondary" onClick={() => addTag(includeInput, includes, setIncludes, setIncludeInput)}>
+            Add
+          </Button>
         </div>
         {includes.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">{includes.map((t, i) => (
-            <span key={i} className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-700">{t}<button onClick={() => removeTag(i, includes, setIncludes)} className="ml-1">&times;</button></span>
-          ))}</div>
+          <div className="flex flex-wrap gap-1.5">
+            {includes.map((t, i) => (
+              <Badge key={i} className="gap-1 rounded-full bg-emerald-500/10 pr-1 text-emerald-700 hover:bg-emerald-500/10">
+                {t}
+                <button onClick={() => removeTag(i, includes, setIncludes)} className="ml-0.5 rounded-full p-0.5 hover:bg-foreground/10">
+                  <XIcon className="size-3" />
+                </button>
+              </Badge>
+            ))}
+          </div>
         )}
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium">Ingredients to Exclude</label>
+        <Label>Ingredients to Exclude</Label>
         <div className="flex gap-2">
-          <input value={excludeInput} onChange={(e) => setExcludeInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(excludeInput, excludes, setExcludes, setExcludeInput); } }} className={inputClass + " flex-1"} placeholder="e.g. beef, dairy..." />
-          <button type="button" onClick={() => addTag(excludeInput, excludes, setExcludes, setExcludeInput)} className="rounded-md bg-secondary px-3 py-2 text-sm font-medium">Add</button>
+          <Input
+            value={excludeInput}
+            onChange={(e) => setExcludeInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addTag(excludeInput, excludes, setExcludes, setExcludeInput);
+              }
+            }}
+            className="flex-1"
+            placeholder="e.g. beef, dairy..."
+          />
+          <Button type="button" variant="secondary" onClick={() => addTag(excludeInput, excludes, setExcludes, setExcludeInput)}>
+            Add
+          </Button>
         </div>
         {excludes.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">{excludes.map((t, i) => (
-            <span key={i} className="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-700">{t}<button onClick={() => removeTag(i, excludes, setExcludes)} className="ml-1">&times;</button></span>
-          ))}</div>
+          <div className="flex flex-wrap gap-1.5">
+            {excludes.map((t, i) => (
+              <Badge key={i} className="gap-1 rounded-full bg-red-500/10 pr-1 text-red-700 hover:bg-red-500/10">
+                {t}
+                <button onClick={() => removeTag(i, excludes, setExcludes)} className="ml-0.5 rounded-full p-0.5 hover:bg-foreground/10">
+                  <XIcon className="size-3" />
+                </button>
+              </Badge>
+            ))}
+          </div>
         )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium">Budget</label>
-          <input value={budget} onChange={(e) => setBudget(e.target.value)} className={inputClass} placeholder="e.g. Under $20/week" />
+          <Label>Budget</Label>
+          <Input
+            value={budget}
+            onChange={(e) => setBudget(e.target.value)}
+            placeholder="e.g. Under $20/week"
+          />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium">Prep Time (minutes)</label>
-          <input type="number" value={prepTime} onChange={(e) => setPrepTime(Number(e.target.value))} className={inputClass} min={5} max={180} />
+          <Label>Prep Time (minutes)</Label>
+          <Input
+            type="number"
+            value={prepTime}
+            onChange={(e) => setPrepTime(Number(e.target.value))}
+            min={5}
+            max={180}
+          />
         </div>
       </div>
 
       <div className="flex justify-between pt-2">
-        <button onClick={onBack} className="rounded-md px-4 py-2 text-sm font-medium hover:bg-accent">Back</button>
-        <button
+        <Button variant="ghost" onClick={onBack}>
+          Back
+        </Button>
+        <Button
           onClick={() => onSubmit({ goal, ingredientsToInclude: includes, ingredientsToExclude: excludes, budget, prepTimeMinutes: prepTime })}
           disabled={!goal || !budget || isLoading}
-          className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm disabled:opacity-50"
         >
           {isLoading ? "Checking safety..." : "Run Safety Check"}
-        </button>
+        </Button>
       </div>
     </div>
   );

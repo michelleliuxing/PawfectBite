@@ -1,10 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { XIcon } from "lucide-react";
 import { petFormSchema, type PetFormValues } from "@/lib/schemas/pet.schema";
 import type { Pet } from "@/lib/types/pet.types";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PetFormProps {
   defaultValues?: Pet;
@@ -62,6 +77,7 @@ export function PetForm({ defaultValues, onSubmit, submitLabel }: PetFormProps) 
   const allergies = watch("allergies") ?? [];
   const medicalConditions = watch("medicalConditions") ?? [];
   const medications = watch("medications") ?? [];
+  const isNeutered = watch("isNeutered");
 
   const addTag = (field: "allergies" | "medicalConditions" | "medications", inputKey: keyof typeof tagInputs) => {
     const value = tagInputs[inputKey].trim();
@@ -78,136 +94,178 @@ export function PetForm({ defaultValues, onSubmit, submitLabel }: PetFormProps) 
     setValue(field, current.filter((_, i) => i !== index));
   };
 
-  const fieldClass = "flex flex-col gap-1.5";
-  const labelClass = "text-sm font-medium";
-  const inputClass = "rounded-md border bg-background px-3 py-2 text-sm outline-none ring-ring focus:ring-2";
-  const selectClass = "rounded-md border bg-background px-3 py-2 text-sm outline-none ring-ring focus:ring-2";
-  const errorClass = "text-xs text-destructive";
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className={fieldClass}>
-          <label className={labelClass}>Name</label>
-          <input {...register("name")} className={inputClass} placeholder="e.g. Buddy" />
-          {errors.name && <p className={errorClass}>{errors.name.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Name</Label>
+          <Input {...register("name")} placeholder="e.g. Buddy" />
+          {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Species</label>
-          <select {...register("species")} className={selectClass}>
-            <option value="">Select...</option>
-            <option value="DOG">Dog</option>
-            <option value="CAT">Cat</option>
-          </select>
-          {errors.species && <p className={errorClass}>{errors.species.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Species</Label>
+          <Select
+            defaultValue={defaultValues?.species}
+            onValueChange={(v) => setValue("species", v as PetFormValues["species"])}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="DOG">Dog</SelectItem>
+                <SelectItem value="CAT">Cat</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {errors.species && <p className="text-xs text-destructive">{errors.species.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Breed</label>
-          <input {...register("breed")} className={inputClass} placeholder="e.g. Golden Retriever" />
-          {errors.breed && <p className={errorClass}>{errors.breed.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Breed</Label>
+          <Input {...register("breed")} placeholder="e.g. Golden Retriever" />
+          {errors.breed && <p className="text-xs text-destructive">{errors.breed.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Sex</label>
-          <select {...register("sex")} className={selectClass}>
-            <option value="">Select...</option>
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-          </select>
-          {errors.sex && <p className={errorClass}>{errors.sex.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Sex</Label>
+          <Select
+            defaultValue={defaultValues?.sex}
+            onValueChange={(v) => setValue("sex", v as PetFormValues["sex"])}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="MALE">Male</SelectItem>
+                <SelectItem value="FEMALE">Female</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {errors.sex && <p className="text-xs text-destructive">{errors.sex.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Age (years)</label>
-          <input type="number" {...register("ageYears")} className={inputClass} min={0} max={30} />
-          {errors.ageYears && <p className={errorClass}>{errors.ageYears.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Age (years)</Label>
+          <Input type="number" {...register("ageYears", { valueAsNumber: true })} min={0} max={30} />
+          {errors.ageYears && <p className="text-xs text-destructive">{errors.ageYears.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Age (months)</label>
-          <input type="number" {...register("ageMonths")} className={inputClass} min={0} max={11} />
-          {errors.ageMonths && <p className={errorClass}>{errors.ageMonths.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Age (months)</Label>
+          <Input type="number" {...register("ageMonths", { valueAsNumber: true })} min={0} max={11} />
+          {errors.ageMonths && <p className="text-xs text-destructive">{errors.ageMonths.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Weight (kg)</label>
-          <input type="number" step="0.1" {...register("weightKg")} className={inputClass} />
-          {errors.weightKg && <p className={errorClass}>{errors.weightKg.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Weight (kg)</Label>
+          <Input type="number" step="0.1" {...register("weightKg", { valueAsNumber: true })} />
+          {errors.weightKg && <p className="text-xs text-destructive">{errors.weightKg.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Target Weight (kg)</label>
-          <input type="number" step="0.1" {...register("targetWeightKg")} className={inputClass} placeholder="Optional" />
+        <div className="flex flex-col gap-1.5">
+          <Label>Target Weight (kg)</Label>
+          <Input type="number" step="0.1" {...register("targetWeightKg", { valueAsNumber: true })} placeholder="Optional" />
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Activity Level</label>
-          <select {...register("activityLevel")} className={selectClass}>
-            <option value="">Select...</option>
-            <option value="LOW">Low</option>
-            <option value="MODERATE">Moderate</option>
-            <option value="HIGH">High</option>
-            <option value="VERY_HIGH">Very High</option>
-          </select>
-          {errors.activityLevel && <p className={errorClass}>{errors.activityLevel.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Activity Level</Label>
+          <Select
+            defaultValue={defaultValues?.activityLevel}
+            onValueChange={(v) => setValue("activityLevel", v as PetFormValues["activityLevel"])}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="LOW">Low</SelectItem>
+                <SelectItem value="MODERATE">Moderate</SelectItem>
+                <SelectItem value="HIGH">High</SelectItem>
+                <SelectItem value="VERY_HIGH">Very High</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {errors.activityLevel && <p className="text-xs text-destructive">{errors.activityLevel.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Living Environment</label>
-          <select {...register("livingEnvironment")} className={selectClass}>
-            <option value="">Select...</option>
-            <option value="INDOOR">Indoor</option>
-            <option value="OUTDOOR">Outdoor</option>
-            <option value="BOTH">Both</option>
-          </select>
-          {errors.livingEnvironment && <p className={errorClass}>{errors.livingEnvironment.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Living Environment</Label>
+          <Select
+            defaultValue={defaultValues?.livingEnvironment}
+            onValueChange={(v) => setValue("livingEnvironment", v as PetFormValues["livingEnvironment"])}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="INDOOR">Indoor</SelectItem>
+                <SelectItem value="OUTDOOR">Outdoor</SelectItem>
+                <SelectItem value="BOTH">Both</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {errors.livingEnvironment && <p className="text-xs text-destructive">{errors.livingEnvironment.message}</p>}
         </div>
 
-        <div className={fieldClass}>
-          <label className={labelClass}>Feeding Frequency (per day)</label>
-          <input type="number" {...register("feedingFrequency")} className={inputClass} min={1} max={6} />
-          {errors.feedingFrequency && <p className={errorClass}>{errors.feedingFrequency.message}</p>}
+        <div className="flex flex-col gap-1.5">
+          <Label>Feeding Frequency (per day)</Label>
+          <Input type="number" {...register("feedingFrequency", { valueAsNumber: true })} min={1} max={6} />
+          {errors.feedingFrequency && <p className="text-xs text-destructive">{errors.feedingFrequency.message}</p>}
         </div>
 
-        <div className="flex items-center gap-3 self-end">
-          <input type="checkbox" {...register("isNeutered")} id="isNeutered" className="size-4 rounded border" />
-          <label htmlFor="isNeutered" className={labelClass}>Neutered / Spayed</label>
+        <div className="flex items-center gap-3 self-end py-2">
+          <Checkbox
+            id="isNeutered"
+            checked={!!isNeutered}
+            onCheckedChange={(checked) => setValue("isNeutered", !!checked)}
+          />
+          <Label htmlFor="isNeutered">Neutered / Spayed</Label>
         </div>
       </div>
 
-      {/* Tag fields */}
-      {([
-        { field: "allergies" as const, inputKey: "allergy" as const, label: "Allergies", items: allergies },
-        { field: "medicalConditions" as const, inputKey: "condition" as const, label: "Medical Conditions", items: medicalConditions },
-        { field: "medications" as const, inputKey: "medication" as const, label: "Medications", items: medications },
-      ]).map(({ field, inputKey, label, items }) => (
-        <div key={field} className={fieldClass}>
-          <label className={labelClass}>{label}</label>
+      {(
+        [
+          { field: "allergies" as const, inputKey: "allergy" as const, label: "Allergies", items: allergies },
+          { field: "medicalConditions" as const, inputKey: "condition" as const, label: "Medical Conditions", items: medicalConditions },
+          { field: "medications" as const, inputKey: "medication" as const, label: "Medications", items: medications },
+        ] as const
+      ).map(({ field, inputKey, label, items }) => (
+        <div key={field} className="flex flex-col gap-1.5">
+          <Label>{label}</Label>
           <div className="flex gap-2">
-            <input
+            <Input
               value={tagInputs[inputKey]}
               onChange={(e) => setTagInputs((prev) => ({ ...prev, [inputKey]: e.target.value }))}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(field, inputKey); } }}
-              className={inputClass + " flex-1"}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addTag(field, inputKey);
+                }
+              }}
+              className="flex-1"
               placeholder={`Add ${label.toLowerCase()}...`}
             />
-            <button
-              type="button"
-              onClick={() => addTag(field, inputKey)}
-              className="rounded-md bg-secondary px-3 py-2 text-sm font-medium hover:bg-secondary/80"
-            >
+            <Button type="button" variant="secondary" onClick={() => addTag(field, inputKey)}>
               Add
-            </button>
+            </Button>
           </div>
           {items.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {items.map((item, i) => (
-                <span key={i} className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs font-medium">
+                <Badge key={i} variant="secondary" className="gap-1 rounded-full pr-1">
                   {item}
-                  <button type="button" onClick={() => removeTag(field, i)} className="ml-1 text-muted-foreground hover:text-foreground">&times;</button>
-                </span>
+                  <button
+                    type="button"
+                    onClick={() => removeTag(field, i)}
+                    className="ml-0.5 rounded-full p-0.5 hover:bg-foreground/10"
+                  >
+                    <XIcon className="size-3" />
+                  </button>
+                </Badge>
               ))}
             </div>
           )}
@@ -215,24 +273,28 @@ export function PetForm({ defaultValues, onSubmit, submitLabel }: PetFormProps) 
       ))}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className={fieldClass}>
-          <label className={labelClass}>Health Goal</label>
-          <textarea {...register("healthGoal")} className={inputClass + " min-h-[80px] resize-none"} placeholder="e.g. Weight management, improve coat" />
+        <div className="flex flex-col gap-1.5">
+          <Label>Health Goal</Label>
+          <Textarea
+            {...register("healthGoal")}
+            className="min-h-[80px] resize-none"
+            placeholder="e.g. Weight management, improve coat"
+          />
         </div>
-        <div className={fieldClass}>
-          <label className={labelClass}>Current Diet</label>
-          <textarea {...register("currentDiet")} className={inputClass + " min-h-[80px] resize-none"} placeholder="e.g. Dry kibble twice daily" />
+        <div className="flex flex-col gap-1.5">
+          <Label>Current Diet</Label>
+          <Textarea
+            {...register("currentDiet")}
+            className="min-h-[80px] resize-none"
+            placeholder="e.g. Dry kibble twice daily"
+          />
         </div>
       </div>
 
       <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Saving..." : submitLabel}
-        </button>
+        </Button>
       </div>
     </form>
   );

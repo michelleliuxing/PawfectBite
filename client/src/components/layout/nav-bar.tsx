@@ -1,8 +1,11 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { LogOut } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import type { User } from "next-auth";
+import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 
 interface NavBarProps {
   user: User;
@@ -10,17 +13,22 @@ interface NavBarProps {
 
 export function NavBar({ user }: NavBarProps) {
   return (
-    <header className="flex h-14 items-center justify-between border-b bg-card px-6">
-      <div />
+    <header className="flex h-14 items-center justify-between border-b bg-background px-4">
+      <div className="flex items-center gap-2">
+        <SidebarTrigger />
+        <Separator orientation="vertical" className="h-4" />
+      </div>
       <div className="flex items-center gap-4">
         <span className="text-sm text-muted-foreground">{user.name}</span>
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => signOut({ callbackUrl: "/sign-in" })}
-          className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="gap-2 text-muted-foreground"
         >
-          <LogOut className="size-4" />
+          <LogOutIcon data-icon="inline-start" />
           Sign out
-        </button>
+        </Button>
       </div>
     </header>
   );

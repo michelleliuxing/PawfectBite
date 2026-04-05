@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth/auth";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { NavBar } from "@/components/layout/nav-bar";
 import { TokenSetter } from "@/components/layout/token-setter";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -12,13 +13,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="flex min-h-screen">
+    <SidebarProvider>
       <TokenSetter token={session.accessToken ?? null} />
       <AppSidebar />
-      <div className="flex flex-1 flex-col">
+      <SidebarInset>
         <NavBar user={session.user} />
         <main className="flex-1 p-6">{children}</main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

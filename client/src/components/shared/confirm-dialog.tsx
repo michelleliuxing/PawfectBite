@@ -1,6 +1,17 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ConfirmDialogProps {
   trigger: ReactNode;
@@ -33,34 +44,26 @@ export function ConfirmDialog({
   };
 
   return (
-    <>
-      <span onClick={() => setOpen(true)}>{trigger}</span>
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />
-          <div className="relative z-50 mx-4 w-full max-w-md rounded-xl border bg-card p-6 shadow-lg">
-            <h2 className="text-lg font-semibold">{title}</h2>
-            <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-            <div className="mt-6 flex justify-end gap-3">
-              <button
-                onClick={() => setOpen(false)}
-                className="rounded-md px-4 py-2 text-sm font-medium hover:bg-accent"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirm}
-                disabled={loading}
-                className={`rounded-md px-4 py-2 text-sm font-medium text-primary-foreground ${
-                  variant === "destructive" ? "bg-destructive hover:bg-destructive/90" : "bg-primary hover:bg-primary/90"
-                } disabled:opacity-50`}
-              >
-                {loading ? "..." : confirmLabel}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <span>{trigger}</span>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            variant={variant}
+            onClick={handleConfirm}
+            disabled={loading}
+          >
+            {loading ? "..." : confirmLabel}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 
+import { ShieldAlertIcon } from "lucide-react";
 import { SafetyBadge } from "@/components/recipes/safety-badge";
-import { ShieldAlert } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { PrecheckResult } from "@/lib/types/recipe.types";
 
 interface StepPrecheckResultProps {
@@ -25,29 +27,25 @@ export function StepPrecheckResult({ result, onProceed, isGenerating, onBack }: 
         <div className="flex flex-col gap-2">
           <h3 className="text-sm font-medium">Warnings</h3>
           {result.warnings.map((w, i) => (
-            <div key={i} className="flex items-start gap-2 rounded-lg border p-3">
-              <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-600" />
-              <div>
-                <p className="text-sm">{w.message}</p>
-                <SafetyBadge riskLevel={w.severity} className="mt-1" />
-              </div>
-            </div>
+            <Alert key={i}>
+              <ShieldAlertIcon className="text-amber-600" />
+              <AlertDescription className="flex flex-col gap-1.5">
+                <span>{w.message}</span>
+                <SafetyBadge riskLevel={w.severity} />
+              </AlertDescription>
+            </Alert>
           ))}
         </div>
       )}
 
       <div className="flex justify-between pt-2">
-        <button onClick={onBack} className="rounded-md px-4 py-2 text-sm font-medium hover:bg-accent">
+        <Button variant="ghost" onClick={onBack}>
           Back
-        </button>
+        </Button>
         {result.canProceed && (
-          <button
-            onClick={onProceed}
-            disabled={isGenerating}
-            className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm disabled:opacity-50"
-          >
+          <Button onClick={onProceed} disabled={isGenerating}>
             {isGenerating ? "Generating recipe..." : "Generate Recipe"}
-          </button>
+          </Button>
         )}
       </div>
     </div>
