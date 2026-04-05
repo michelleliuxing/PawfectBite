@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Heart, ShieldCheck, Sparkles, Utensils, ArrowRight } from "lucide-react";
+import { MainNavBar } from "@/components/layout/main-nav-bar";
 
 export default function LandingPage() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -35,68 +35,16 @@ export default function LandingPage() {
         <div className="absolute bottom-20 left-1/4 w-64 h-64 bg-[#98C9A3]/20 rounded-full blur-3xl" />
       </div>
 
-      <main className="relative z-10 max-w-5xl mx-auto px-6 py-12 md:py-20 flex flex-col items-center">
-        
-        {/* Navigation / Header */}
-        <motion.header 
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="w-full flex justify-between items-center mb-16 md:mb-24"
-        >
-          <div className="flex items-center gap-3">
-            <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] overflow-hidden flex items-center justify-center p-2">
-              <Image 
-                src="/images/logo.PNG" 
-                alt="PawfectBite Logo" 
-                fill
-                className="object-contain p-1"
-                priority
-              />
-            </div>
-            <span className="text-2xl md:text-3xl font-black tracking-tight text-[#4A3B32]">
-              PawfectBite
-            </span>
-          </div>
-          
-          {status === "loading" ? (
-            <div className="hidden md:block w-24 h-12 bg-[#4A3B32]/10 rounded-full animate-pulse" />
-          ) : session?.user ? (
-            <Link href="/pets">
-              <motion.div 
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
-                className="hidden md:flex items-center gap-3 bg-white text-[#4A3B32] px-2 py-2 pr-6 rounded-full font-bold border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors hover:bg-[#FFF9F2]"
-              >
-                {session.user.image ? (
-                  <Image 
-                    src={session.user.image} 
-                    alt={session.user.name || "User"} 
-                    width={32} 
-                    height={32} 
-                    className="rounded-full border-2 border-[#4A3B32]"
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-[#F7B2B7] border-2 border-[#4A3B32] flex items-center justify-center">
-                    <span className="text-sm font-black text-white">{session.user.name?.[0] || "U"}</span>
-                  </div>
-                )}
-                <span>{session.user.name?.split(' ')[0] || "Profile"}</span>
-              </motion.div>
-            </Link>
-          ) : (
-            <Link href="/sign-in">
-              <motion.div 
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
-                className="hidden md:flex items-center gap-2 bg-[#F4D06F] text-[#4A3B32] px-6 py-3 rounded-full font-bold border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors hover:bg-[#F6DE96]"
-              >
-                Sign In
-              </motion.div>
-            </Link>
-          )}
-        </motion.header>
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 24 }}
+        className="relative z-10 w-full"
+      >
+        <MainNavBar user={session?.user} />
+      </motion.div>
 
+      <main className="relative z-10 max-w-5xl mx-auto px-6 pb-12 md:pb-20 pt-4 md:pt-8 flex flex-col items-center">
         {/* Hero Section */}
         <motion.section 
           variants={containerVariants}
