@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { Plus, Dog, Cat, Heart, Activity, Scale, Info } from "lucide-react";
+import { Plus, Dog, Cat, Heart, Info } from "lucide-react";
 import { usePets } from "@/lib/hooks/use-pets";
 import { useSession } from "next-auth/react";
+import { PetCard } from "@/components/pets/pet-card";
 
 export default function PetsPage() {
   const { data: session } = useSession();
@@ -135,78 +135,17 @@ export default function PetsPage() {
       )}
 
       {pets && pets.length > 0 && (
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          className="flex flex-col gap-8 w-full"
         >
-          {pets.map((pet) => {
-            const isDog = pet.species === 'DOG';
-            const themeColor = isDog ? 'bg-[#F4D06F]' : 'bg-[#98C9A3]';
-            const Icon = isDog ? Dog : Cat;
-
-            return (
-              <motion.div key={pet.id} variants={itemVariants} className="h-full">
-                <Link href={`/pets/${pet.id}`} className="block h-full">
-                  <motion.div 
-                    whileHover={{ y: -8, rotate: isDog ? 2 : -2 }}
-                    className="h-full bg-white rounded-[2.5rem] border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] flex flex-col relative transition-transform overflow-hidden group"
-                  >
-                    {/* Card Header Background */}
-                    <div className={`h-24 w-full ${themeColor} border-b-4 border-[#4A3B32] relative overflow-hidden`}>
-                      <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#4A3B32 2px, transparent 2px)', backgroundSize: '16px 16px' }} />
-                    </div>
-
-                    {/* Pet Icon Badge */}
-                    <div className="absolute top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-white rounded-full border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden relative">
-                      {pet.photoUrl ? (
-                        <Image src={pet.photoUrl} alt={pet.name} fill className="object-cover" />
-                      ) : (
-                        <Icon className="w-12 h-12 text-[#4A3B32]" />
-                      )}
-                    </div>
-
-                    {/* Card Content */}
-                    <div className="pt-16 pb-8 px-6 flex flex-col items-center flex-1 text-center">
-                      <h3 className="text-3xl font-black text-[#4A3B32] mb-2">{pet.name}</h3>
-                      <p className="text-sm font-bold text-[#4A3B32]/60 uppercase tracking-wider mb-6">
-                        {pet.breed}
-                      </p>
-
-                      <div className="grid grid-cols-2 gap-3 w-full mt-auto">
-                        <div className="bg-[#FFF9F2] p-3 rounded-2xl border-2 border-[#4A3B32] flex flex-col items-center">
-                          <Scale className="w-5 h-5 text-[#E88D72] mb-1" />
-                          <span className="font-black text-[#4A3B32]">{pet.weightKg} kg</span>
-                        </div>
-                        <div className="bg-[#FFF9F2] p-3 rounded-2xl border-2 border-[#4A3B32] flex flex-col items-center">
-                          <Activity className="w-5 h-5 text-[#F7B2B7] mb-1" />
-                          <span className="font-black text-[#4A3B32] text-sm capitalize">
-                            {pet.activityLevel.replace("_", " ").toLowerCase()}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Tags */}
-                      <div className="flex flex-wrap justify-center gap-2 mt-4">
-                        <span className="bg-[#4A3B32] text-white px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">
-                          {pet.ageYears}y {pet.ageMonths}m
-                        </span>
-                        <span className="bg-white text-[#4A3B32] px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">
-                          {pet.sex === "MALE" ? "Male" : "Female"}
-                        </span>
-                        {(pet.allergies.length > 0 || pet.medicalConditions.length > 0) && (
-                          <span className="bg-[#E88D72] text-white px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">
-                            Medical
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              </motion.div>
-            );
-          })}
+          {pets.map((pet) => (
+            <motion.div key={pet.id} variants={itemVariants} className="w-full">
+              <PetCard pet={pet} />
+            </motion.div>
+          ))}
         </motion.div>
       )}
     </div>
