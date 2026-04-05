@@ -519,9 +519,9 @@ All endpoints except `/api/auth/**` require authentication (Bearer JWT).
 ### Route Structure
 
 * `(auth)/sign-in` -- Google sign-in page (unauthenticated)
-* `(dashboard)/pets` -- pet list, create, detail, edit
-* `(dashboard)/recipes` -- recipe history, generate wizard, recipe detail
-* `(dashboard)/calendar` -- monthly calendar grid with meal assignment
+* `(main)/pets` -- pet list, create, detail, edit (List is public, create/edit requires auth)
+* `(main)/recipes` -- recipe history, generate wizard, recipe detail (List is public, generate requires auth)
+* `(main)/calendar` -- monthly calendar grid with meal assignment (Requires auth)
 
 ### Component Organization
 
@@ -594,7 +594,7 @@ Warm color palette with oklch colors:
 
 * use typed forms with React Hook Form + Zod
 * keep components reusable and feature-scoped
-* separate public `(auth)` and authenticated `(dashboard)` route groups
+* separate public `(auth)` and main app `(main)` route groups
 * keep API access in dedicated `lib/api/*.api.ts` modules
 * wrap API calls in TanStack Query hooks (`lib/hooks/`)
 * use `ApiResponse<T>` envelope pattern in the API client

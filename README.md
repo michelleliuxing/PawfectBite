@@ -136,13 +136,13 @@ PawfectBite/
 │   └── src/
 │       ├── app/
 │       │   ├── (auth)/sign-in/     # Google sign-in page
-│       │   ├── (dashboard)/        # Protected dashboard layout
-│       │   │   ├── pets/           # Pet management pages
-│       │   │   ├── recipes/        # Recipe generation & history pages
+│       │   ├── (main)/             # Cozy Kawaii main app interface
+│       │   │   ├── pets/           # Pet management pages (Publicly accessible)
+│       │   │   ├── recipes/        # Recipe generation & history pages (Publicly accessible)
 │       │   │   └── calendar/       # Monthly calendar page
 │       │   └── api/auth/           # Auth.js API route handler
 │       ├── components/
-│       │   ├── layout/             # Sidebar, navbar, page header
+│       │   ├── layout/             # Main navbar, page header
 │       │   ├── pets/               # Pet card, form, profile summary
 │       │   ├── recipes/            # Recipe card, detail view, safety badge, wizard (4 steps)
 │       │   ├── calendar/           # Calendar grid, entry dialog
