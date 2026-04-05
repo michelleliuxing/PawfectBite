@@ -39,33 +39,25 @@ export default function PetsPage() {
       <motion.div 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white p-8 md:p-10 rounded-[3rem] border-4 border-[#4A3B32] shadow-[12px_12px_0px_#4A3B32] mb-12 relative overflow-hidden flex flex-col sm:flex-row justify-between items-center gap-6"
+        className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-12"
       >
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#4A3B32 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
-        
-        <div className="flex items-center gap-6 relative z-10">
-          <motion.div 
-            animate={{ rotate: [-5, 5, -5] }} 
-            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-            className="w-20 h-20 bg-[#F7B2B7] rounded-[2rem] border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] flex items-center justify-center"
-          >
-            <Heart className="w-10 h-10 text-white" fill="white" />
-          </motion.div>
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 bg-[#F7B2B7] rounded-2xl border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] flex items-center justify-center rotate-[3deg]">
+            <Heart className="w-8 h-8 text-white" fill="white" />
+          </div>
           <div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-[#4A3B32] mb-2">My Pets</h1>
-            <p className="text-lg font-bold text-[#4A3B32]/60 bg-white/50 px-4 py-1 rounded-full border-2 border-[#4A3B32]/10 inline-block">
-              Manage your furry family members
-            </p>
+            <h1 className="text-4xl font-black tracking-tight">My Pets</h1>
+            <p className="text-lg font-medium text-[#4A3B32]/70">Manage your furry family members</p>
           </div>
         </div>
 
-        <Link href={session ? "/pets/new" : "/sign-in"} className="relative z-10 w-full sm:w-auto">
+        <Link href={session ? "/pets/new" : "/sign-in"}>
           <motion.button 
-            whileHover={{ scale: 1.05, y: -4, rotate: 2 }}
-            whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
-            className="w-full sm:w-auto flex items-center justify-center gap-3 bg-[#98C9A3] text-white px-8 py-4 rounded-full font-black text-xl border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] transition-all"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
+            className="flex items-center gap-2 bg-[#98C9A3] text-white px-6 py-3 rounded-full font-black border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors"
           >
-            <Plus className="w-6 h-6" strokeWidth={3} />
+            <Plus className="w-5 h-5" strokeWidth={3} />
             Add Pet
           </motion.button>
         </Link>
