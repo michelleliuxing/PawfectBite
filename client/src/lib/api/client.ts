@@ -55,6 +55,31 @@ class ApiClient {
   async delete<T>(path: string): Promise<T> {
     return this.request<T>(path, { method: "DELETE" });
   }
+
+  async upload<T>(path: string, file: File, fieldName = "file"): Promise<T> {
+    const formData = new FormData();
+    formData.append(fieldName, file);
+
+    const headers: Record<string, string> = {};
+    if (this.token) {
+      headers["Authorization"] = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      method: "POST",
+      headers,
+      body: formData,
+    });
+
+    const body: ApiResponse<T> = await response.json();
+
+    if (!response.ok || body.error) {
+      const message = body.error?.message ?? `Request failed with status ${response.status}`;
+      throw new ApiClientError(body.error?.code ?? "UNKNOWN", message, response.status);
+    }
+
+    return body.data as T;
+  }
 }
 
 export class ApiClientError extends Error {

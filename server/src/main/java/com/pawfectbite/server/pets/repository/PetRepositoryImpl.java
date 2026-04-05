@@ -70,5 +70,6 @@ public class PetRepositoryImpl implements PetRepository {
         entity.setHealthGoal(pet.healthGoal());
         entity.setCurrentDiet(pet.currentDiet());
         entity.setFeedingFrequency(pet.feedingFrequency());
+        entity.setPhotoUrl(pet.photoUrl());
     }
 }

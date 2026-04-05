@@ -47,3 +47,25 @@ export function useDeletePet() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: PETS_KEY }),
   });
 }
+
+export function useUploadPetPhoto(petId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (file: File) => petsApi.uploadPhoto(petId, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PETS_KEY });
+      queryClient.invalidateQueries({ queryKey: [...PETS_KEY, petId] });
+    },
+  });
+}
+
+export function useDeletePetPhoto(petId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => petsApi.deletePhoto(petId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PETS_KEY });
+      queryClient.invalidateQueries({ queryKey: [...PETS_KEY, petId] });
+    },
+  });
+}

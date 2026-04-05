@@ -10,12 +10,14 @@ import {
   HeartPulse, Pill, XIcon, ArrowRight, ArrowLeft, CheckCircle2
 } from "lucide-react";
 import { petFormSchema, type PetFormValues } from "@/lib/schemas/pet.schema";
+import { PetPhotoUpload } from "./pet-photo-upload";
 
 interface PetWizardProps {
   onSubmit: (data: PetFormValues) => Promise<void>;
+  onPhotoSelected?: (file: File | null) => void;
 }
 
-export function PetWizard({ onSubmit }: PetWizardProps) {
+export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [tagInputs, setTagInputs] = useState({
     allergy: "",
@@ -142,6 +144,14 @@ export function PetWizard({ onSubmit }: PetWizardProps) {
                 </div>
 
                 <div className="flex flex-col gap-8">
+                  {/* Photo */}
+                  <div className="flex justify-center">
+                    <PetPhotoUpload
+                      onFileSelected={(file) => onPhotoSelected?.(file)}
+                      onRemove={() => onPhotoSelected?.(null)}
+                    />
+                  </div>
+
                   {/* Name */}
                   <div>
                     <label className={labelClasses}><PawPrint className="w-5 h-5 text-[#E88D72]" /> Pet&apos;s Name</label>

@@ -12,4 +12,10 @@ export const petsApi = {
     apiClient.put<Pet>(`/api/pets/${petId}`, data),
 
   delete: (petId: string) => apiClient.delete<void>(`/api/pets/${petId}`),
+
+  uploadPhoto: (petId: string, file: File) =>
+    apiClient.upload<Pet>(`/api/pets/${petId}/photo`, file),
+
+  deletePhoto: (petId: string) =>
+    apiClient.delete<Pet>(`/api/pets/${petId}/photo`),
 };

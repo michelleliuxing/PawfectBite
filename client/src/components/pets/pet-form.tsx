@@ -11,6 +11,8 @@ import {
 import { motion } from "framer-motion";
 import { petFormSchema, type PetFormValues } from "@/lib/schemas/pet.schema";
 import type { Pet } from "@/lib/types/pet.types";
+import { PetPhotoUpload } from "./pet-photo-upload";
+import { useUploadPetPhoto, useDeletePetPhoto } from "@/lib/hooks/use-pets";
 
 interface PetFormProps {
   defaultValues?: Pet;
@@ -89,6 +91,10 @@ export function PetForm({ defaultValues, onSubmit, submitLabel }: PetFormProps) 
     setValue(field, current.filter((_, i) => i !== index));
   };
 
+  const petId = defaultValues?.id;
+  const uploadPhoto = useUploadPetPhoto(petId ?? "");
+  const deletePhoto = useDeletePetPhoto(petId ?? "");
+
   const inputClasses = "w-full bg-[#FFF9F2] border-4 border-[#4A3B32] rounded-2xl px-4 py-3 font-bold text-[#4A3B32] focus:outline-none focus:ring-4 focus:ring-[#F4D06F]/50 transition-all placeholder:text-[#4A3B32]/40";
   const labelClasses = "text-sm font-black text-[#4A3B32] uppercase tracking-wider mb-2 flex items-center gap-2";
   const errorClasses = "text-xs font-bold text-[#E88D72] mt-2 bg-[#E88D72]/10 px-3 py-1 rounded-full inline-block border-2 border-[#E88D72]";
@@ -103,7 +109,19 @@ export function PetForm({ defaultValues, onSubmit, submitLabel }: PetFormProps) 
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#F7B2B7]/20 rounded-full blur-3xl -z-10 transform -translate-x-1/2 -translate-y-1/2" />
 
         <div className="flex flex-col gap-8">
-          
+
+          {/* Photo Upload (available when editing an existing pet) */}
+          {petId && (
+            <div className="flex justify-center pb-4 border-b-4 border-[#4A3B32]/10">
+              <PetPhotoUpload
+                currentPhotoUrl={defaultValues?.photoUrl}
+                onFileSelected={(file) => uploadPhoto.mutate(file)}
+                onRemove={() => deletePhoto.mutate()}
+                isUploading={uploadPhoto.isPending}
+              />
+            </div>
+          )}
+
           {/* ROW 1: Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             <div>

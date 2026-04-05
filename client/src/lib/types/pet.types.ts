@@ -23,6 +23,7 @@ export interface Pet {
   healthGoal: string | null;
   currentDiet: string | null;
   feedingFrequency: number;
+  photoUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }

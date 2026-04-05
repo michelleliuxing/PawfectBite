@@ -25,6 +25,7 @@ public record Pet(
         String healthGoal,
         String currentDiet,
         int feedingFrequency,
+        String photoUrl,
         Instant createdAt,
         Instant updatedAt
 ) {}

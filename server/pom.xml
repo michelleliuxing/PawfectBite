@@ -87,6 +87,13 @@
 			<version>2.21.2</version>
 		</dependency>
 
+		<!-- Cloudinary -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http45</artifactId>
+			<version>1.39.0</version>
+		</dependency>
+
 		<!-- Google Auth (ID token verification) -->
 		<dependency>
 			<groupId>com.google.auth</groupId>

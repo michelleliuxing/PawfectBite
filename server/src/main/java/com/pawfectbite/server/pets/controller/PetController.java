@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -65,6 +66,29 @@ public class PetController {
         Pet existing = petService.getPetById(petId);
         ownershipEnforcer.enforce(existing.userId());
         Pet updated = petService.updatePet(petId, principal.userId(), request);
+        return ApiResponse.ok(PetResponse.from(updated));
+    }
+
+    @PostMapping("/{petId}/photo")
+    public ApiResponse<PetResponse> uploadPhoto(
+            @PathVariable UUID petId,
+            @RequestParam("file") MultipartFile file,
+            @AuthenticationPrincipal AuthenticatedUser principal
+    ) {
+        Pet existing = petService.getPetById(petId);
+        ownershipEnforcer.enforce(existing.userId());
+        Pet updated = petService.uploadPhoto(petId, principal.userId(), file);
+        return ApiResponse.ok(PetResponse.from(updated));
+    }
+
+    @DeleteMapping("/{petId}/photo")
+    public ApiResponse<PetResponse> deletePhoto(
+            @PathVariable UUID petId,
+            @AuthenticationPrincipal AuthenticatedUser principal
+    ) {
+        Pet existing = petService.getPetById(petId);
+        ownershipEnforcer.enforce(existing.userId());
+        Pet updated = petService.deletePhoto(petId);
         return ApiResponse.ok(PetResponse.from(updated));
     }
 

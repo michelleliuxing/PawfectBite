@@ -66,6 +66,9 @@ public class PetEntity extends AuditableEntity {
     @Column(name = "feeding_frequency", nullable = false)
     private int feedingFrequency;
 
+    @Column(name = "photo_url", length = 1000)
+    private String photoUrl;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "pet_allergies", joinColumns = @JoinColumn(name = "pet_id"))
     @Column(name = "name")
@@ -89,7 +92,8 @@ public class PetEntity extends AuditableEntity {
                 sex, isNeutered, weightKg, targetWeightKg, activityLevel,
                 livingEnvironment, new ArrayList<>(allergies),
                 new ArrayList<>(medicalConditions), new ArrayList<>(medications),
-                healthGoal, currentDiet, feedingFrequency, getCreatedAt(), getUpdatedAt()
+                healthGoal, currentDiet, feedingFrequency, photoUrl,
+                getCreatedAt(), getUpdatedAt()
         );
     }
 
@@ -116,4 +120,6 @@ public class PetEntity extends AuditableEntity {
     public void setAllergies(List<String> allergies) { this.allergies = new ArrayList<>(allergies); }
     public void setMedicalConditions(List<String> medicalConditions) { this.medicalConditions = new ArrayList<>(medicalConditions); }
     public void setMedications(List<String> medications) { this.medications = new ArrayList<>(medications); }
+    public String getPhotoUrl() { return photoUrl; }
+    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
 }

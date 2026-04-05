@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Plus, Dog, Cat, Heart, Activity, Scale, Info } from "lucide-react";
 import { usePets } from "@/lib/hooks/use-pets";
@@ -158,8 +159,12 @@ export default function PetsPage() {
                     </div>
 
                     {/* Pet Icon Badge */}
-                    <div className="absolute top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-white rounded-full border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <Icon className="w-12 h-12 text-[#4A3B32]" />
+                    <div className="absolute top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-white rounded-full border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden relative">
+                      {pet.photoUrl ? (
+                        <Image src={pet.photoUrl} alt={pet.name} fill className="object-cover" />
+                      ) : (
+                        <Icon className="w-12 h-12 text-[#4A3B32]" />
+                      )}
                     </div>
 
                     {/* Card Content */}

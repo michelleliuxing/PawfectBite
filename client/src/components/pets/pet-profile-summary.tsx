@@ -2,6 +2,7 @@
 
 import { DogIcon, CatIcon, Activity, HeartPulse, Scale, Home, Info } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import type { Pet } from "@/lib/types/pet.types";
 
 interface PetProfileSummaryProps {
@@ -26,8 +27,12 @@ export function PetProfileSummary({ pet }: PetProfileSummaryProps) {
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#4A3B32 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
         
         <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6">
-          <div className="w-24 h-24 bg-white rounded-[2rem] border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] flex items-center justify-center rotate-[-3deg]">
-            <Icon className="w-12 h-12 text-[#4A3B32]" />
+          <div className="w-24 h-24 bg-white rounded-[2rem] border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] flex items-center justify-center rotate-[-3deg] overflow-hidden relative">
+            {pet.photoUrl ? (
+              <Image src={pet.photoUrl} alt={pet.name} fill className="object-cover" />
+            ) : (
+              <Icon className="w-12 h-12 text-[#4A3B32]" />
+            )}
           </div>
           <div className="text-center md:text-left flex-1">
             <h2 className="text-4xl font-black text-[#4A3B32] mb-2">{pet.name}</h2>

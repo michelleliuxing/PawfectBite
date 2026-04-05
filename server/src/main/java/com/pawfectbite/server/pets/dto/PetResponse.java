@@ -27,6 +27,7 @@ public record PetResponse(
         String healthGoal,
         String currentDiet,
         int feedingFrequency,
+        String photoUrl,
         Instant createdAt,
         Instant updatedAt
 ) {
@@ -37,7 +38,8 @@ public record PetResponse(
                 pet.weightKg(), pet.targetWeightKg(), pet.activityLevel(),
                 pet.livingEnvironment(), pet.allergies(), pet.medicalConditions(),
                 pet.medications(), pet.healthGoal(), pet.currentDiet(),
-                pet.feedingFrequency(), pet.createdAt(), pet.updatedAt()
+                pet.feedingFrequency(), pet.photoUrl(),
+                pet.createdAt(), pet.updatedAt()
         );
     }
 }

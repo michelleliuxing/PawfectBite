@@ -1,18 +1,28 @@
 "use client";
 
+import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { PetWizard } from "@/components/pets/pet-wizard";
 import { useCreatePet } from "@/lib/hooks/use-pets";
+import { petsApi } from "@/lib/api/pets.api";
 import type { PetFormValues } from "@/lib/schemas/pet.schema";
 
 export default function NewPetPage() {
   const router = useRouter();
   const createPet = useCreatePet();
+  const selectedPhoto = useRef<File | null>(null);
 
   const handleSubmit = async (data: PetFormValues) => {
-    await createPet.mutateAsync(data);
+    const pet = await createPet.mutateAsync(data);
+    if (selectedPhoto.current && pet.id) {
+      try {
+        await petsApi.uploadPhoto(pet.id, selectedPhoto.current);
+      } catch {
+        // Pet created successfully; photo upload can be retried from edit page
+      }
+    }
     router.push("/pets");
   };
 
@@ -32,7 +42,10 @@ export default function NewPetPage() {
         </div>
       </motion.div>
 
-      <PetWizard onSubmit={handleSubmit} />
+      <PetWizard
+        onSubmit={handleSubmit}
+        onPhotoSelected={(file) => { selectedPhoto.current = file; }}
+      />
     </div>
   );
 }
