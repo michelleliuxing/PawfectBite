@@ -6,10 +6,13 @@ import { Plus, Dog, Cat, Heart, Info } from "lucide-react";
 import { usePets } from "@/lib/hooks/use-pets";
 import { useSession } from "next-auth/react";
 import { PetCard } from "@/components/pets/pet-card";
+import { LoadingSpinner } from "@/components/shared/loading-spinner";
 
 export default function PetsPage() {
-  const { data: session } = useSession();
-  const { data: pets, isLoading, error } = usePets();
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
+  const { data: pets, isLoading: isPetsLoading, error } = usePets({ enabled: isAuthenticated });
+  const isLoading = status === "loading" || (isAuthenticated && isPetsLoading);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -52,7 +55,7 @@ export default function PetsPage() {
           </div>
         </div>
 
-        <Link href={session ? "/pets/new" : "/sign-in"}>
+        <Link href="/pets/new">
           <motion.button 
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
@@ -64,18 +67,7 @@ export default function PetsPage() {
         </Link>
       </motion.div>
 
-      {isLoading && (
-        <div className="flex flex-col items-center justify-center py-20 gap-6">
-          <motion.div 
-            animate={{ rotate: 360 }} 
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-            className="w-16 h-16 border-8 border-[#4A3B32] border-t-[#F4D06F] rounded-full shadow-[4px_4px_0px_#4A3B32]"
-          />
-          <p className="font-black text-xl text-[#4A3B32] bg-white px-6 py-2 rounded-full border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32]">
-            Loading your pets...
-          </p>
-        </div>
-      )}
+      {isLoading && <LoadingSpinner message="Loading your pets..." color="yellow" />}
 
       {error && (
         <motion.div 
@@ -121,7 +113,7 @@ export default function PetsPage() {
             Add your first pet to start generating personalized, vet-safe meal recipes.
           </p>
 
-          <Link href={session ? "/pets/new" : "/sign-in"} className="relative z-10">
+          <Link href="/pets/new" className="relative z-10">
             <motion.button 
               whileHover={{ scale: 1.05, y: -4, rotate: -2 }}
               whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}

@@ -6,10 +6,11 @@ import type { CreatePetRequest, UpdatePetRequest } from "@/lib/types/pet.types";
 
 const PETS_KEY = ["pets"] as const;
 
-export function usePets() {
+export function usePets(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: PETS_KEY,
     queryFn: petsApi.list,
+    ...options,
   });
 }
 

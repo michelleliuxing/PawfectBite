@@ -9,10 +9,13 @@ import { CalendarEntryDialog } from "@/components/calendar/calendar-entry-dialog
 import type { CalendarEntry } from "@/lib/types/calendar.types";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { LoadingSpinner } from "@/components/shared/loading-spinner";
 
 export default function CalendarPage() {
-  const { data: session } = useSession();
-  const { data: pets, isLoading } = usePets();
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
+  const { data: pets, isLoading: isPetsLoading } = usePets({ enabled: isAuthenticated });
+  const isLoading = status === "loading" || (isAuthenticated && isPetsLoading);
   const [selectedPetId, setSelectedPetId] = useState<string>("");
   const [dialogState, setDialogState] = useState<{
     date: string;
@@ -22,16 +25,7 @@ export default function CalendarPage() {
   const activePetId = selectedPetId || pets?.[0]?.id || "";
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <motion.div 
-          animate={{ rotate: 360 }} 
-          transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-          className="w-12 h-12 border-4 border-[#4A3B32] border-t-[#98C9A3] rounded-full"
-        />
-        <p className="font-bold text-[#4A3B32]/70">Loading calendar...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading calendar..." color="green" />;
   }
 
   if (!pets || pets.length === 0) {
@@ -73,7 +67,7 @@ export default function CalendarPage() {
             Add a pet first to start planning their delicious meals on the calendar.
           </p>
 
-          <Link href={session ? "/pets/new" : "/sign-in"} className="relative z-10">
+          <Link href="/pets/new" className="relative z-10">
             <motion.button 
               whileHover={{ scale: 1.05, y: -4, rotate: 2 }}
               whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}

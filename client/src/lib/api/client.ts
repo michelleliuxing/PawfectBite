@@ -24,7 +24,8 @@ class ApiClient {
       headers,
     });
 
-    const body: ApiResponse<T> = await response.json();
+    const text = await response.text();
+    const body: ApiResponse<T> = text ? JSON.parse(text) : { data: null as unknown as T };
 
     if (!response.ok || body.error) {
       const message = body.error?.message ?? `Request failed with status ${response.status}`;
@@ -71,7 +72,8 @@ class ApiClient {
       body: formData,
     });
 
-    const body: ApiResponse<T> = await response.json();
+    const text = await response.text();
+    const body: ApiResponse<T> = text ? JSON.parse(text) : { data: null as unknown as T };
 
     if (!response.ok || body.error) {
       const message = body.error?.message ?? `Request failed with status ${response.status}`;

@@ -7,12 +7,16 @@ import { Plus, ChefHat, Utensils } from "lucide-react";
 import { useRecipes } from "@/lib/hooks/use-recipes";
 import { usePets } from "@/lib/hooks/use-pets";
 import { useSession } from "next-auth/react";
+import { LoadingSpinner } from "@/components/shared/loading-spinner";
 
 export default function RecipesPage() {
-  const { data: session } = useSession();
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
   const [selectedPetId, setSelectedPetId] = useState<string | undefined>();
-  const { data: recipes, isLoading, error } = useRecipes(selectedPetId);
-  const { data: pets } = usePets();
+  const { data: recipes, isLoading: isRecipesLoading, error: recipesError } = useRecipes(selectedPetId, { enabled: isAuthenticated });
+  const { data: pets, error: petsError } = usePets({ enabled: isAuthenticated });
+  const isLoading = status === "loading" || (isAuthenticated && isRecipesLoading);
+  const error = recipesError || petsError;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -48,14 +52,14 @@ export default function RecipesPage() {
           </div>
         </div>
 
-        <Link href={session ? "/recipes/generate" : "/sign-in"}>
+        <Link href={(!pets || pets.length === 0) ? "/pets/new" : "/recipes/generate"}>
           <motion.button 
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
-            className="flex items-center gap-2 bg-[#E88D72] text-white px-6 py-3 rounded-full font-black border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors"
+            className={`flex items-center gap-2 ${(!pets || pets.length === 0) ? "bg-[#98C9A3]" : "bg-[#E88D72]"} text-white px-6 py-3 rounded-full font-black border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors`}
           >
             <Plus className="w-5 h-5" strokeWidth={3} />
-            Generate Recipe
+            {(!pets || pets.length === 0) ? "Add Pet" : "Generate Recipe"}
           </motion.button>
         </Link>
       </motion.div>
@@ -92,16 +96,7 @@ export default function RecipesPage() {
         </motion.div>
       )}
 
-      {isLoading && (
-        <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <motion.div 
-            animate={{ rotate: 360 }} 
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-            className="w-12 h-12 border-4 border-[#4A3B32] border-t-[#F7B2B7] rounded-full"
-          />
-          <p className="font-bold text-[#4A3B32]/70">Loading recipes...</p>
-        </div>
-      )}
+      {isLoading && <LoadingSpinner message="Loading recipes..." color="pink" />}
 
       {error && (
         <div className="bg-white p-8 rounded-[2rem] border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] text-center">
@@ -128,17 +123,19 @@ export default function RecipesPage() {
 
           <h2 className="text-3xl font-black mb-4 relative z-10">No recipes yet!</h2>
           <p className="text-xl font-medium text-[#4A3B32]/70 mb-8 max-w-md relative z-10">
-            Generate your first personalized meal recipe tailored to your pet&apos;s needs.
+            {(!pets || pets.length === 0) 
+              ? "Start by adding a pet profile to generate personalized, vet-safe meal recipes."
+              : "Generate your first personalized meal recipe tailored to your pet's needs."}
           </p>
 
-          <Link href={session ? "/recipes/generate" : "/sign-in"} className="relative z-10">
+          <Link href={(!pets || pets.length === 0) ? "/pets/new" : "/recipes/generate"} className="relative z-10">
             <motion.button 
               whileHover={{ scale: 1.05, y: -4, rotate: 2 }}
               whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
-              className="flex items-center gap-3 bg-[#F4D06F] text-[#4A3B32] px-8 py-4 rounded-full font-black text-xl border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] transition-all"
+              className={`flex items-center gap-3 ${(!pets || pets.length === 0) ? "bg-[#F7B2B7]" : "bg-[#F4D06F]"} text-[#4A3B32] px-8 py-4 rounded-full font-black text-xl border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] transition-all`}
             >
               <Plus className="w-6 h-6" strokeWidth={3} />
-              Generate Recipe
+              {(!pets || pets.length === 0) ? "Add Your First Pet" : "Generate Recipe"}
             </motion.button>
           </Link>
         </motion.div>

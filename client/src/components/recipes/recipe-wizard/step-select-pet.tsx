@@ -12,7 +12,7 @@ interface StepSelectPetProps {
 export function StepSelectPet({ onSelect }: StepSelectPetProps) {
   const { data: pets, isLoading } = usePets();
 
-  if (isLoading) return <LoadingSpinner message="Loading your pets..." />;
+  if (isLoading) return <LoadingSpinner message="Loading your pets..." color="yellow" />;
 
   return (
     <div className="flex flex-col gap-3">

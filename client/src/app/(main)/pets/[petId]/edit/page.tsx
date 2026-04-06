@@ -22,7 +22,7 @@ export default function EditPetPage() {
     router.push(`/pets/${petId}`);
   };
 
-  if (isLoading) return <LoadingSpinner message="Loading pet..." />;
+  if (isLoading) return <LoadingSpinner message="Loading pet..." color="yellow" />;
   if (error) return <ErrorAlert message="Failed to load pet" />;
   if (!pet) return null;
 

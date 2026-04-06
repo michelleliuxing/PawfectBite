@@ -4,8 +4,13 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Sparkles, Heart, PawPrint } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { LoadingSpinner } from "@/components/shared/loading-spinner";
 
-export default function SignInPage() {
+function SignInContent() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/pets";
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -66,7 +71,7 @@ export default function SignInPage() {
             <motion.button
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
-              onClick={() => signIn("google", { callbackUrl: "/pets" })}
+              onClick={() => signIn("google", { callbackUrl })}
               className="w-full flex items-center justify-center gap-4 bg-white text-[#4A3B32] px-8 py-5 rounded-2xl font-black text-lg border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] transition-all"
             >
               <svg className="w-6 h-6" viewBox="0 0 24 24">
@@ -195,5 +200,13 @@ export default function SignInPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner message="Loading..." color="pink" className="min-h-screen bg-[#FFF9F2]" />}>
+      <SignInContent />
+    </Suspense>
   );
 }

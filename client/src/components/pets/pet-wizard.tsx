@@ -15,9 +15,10 @@ import { PetPhotoUpload } from "./pet-photo-upload";
 interface PetWizardProps {
   onSubmit: (data: PetFormValues) => Promise<void>;
   onPhotoSelected?: (file: File | null) => void;
+  defaultValues?: Partial<PetFormValues>;
 }
 
-export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
+export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizardProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [tagInputs, setTagInputs] = useState({
     allergy: "",
@@ -43,6 +44,7 @@ export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
       allergies: [],
       medicalConditions: [],
       medications: [],
+      ...defaultValues,
     },
   });
 
@@ -100,16 +102,21 @@ export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
     <div className="w-full max-w-5xl mx-auto">
       {/* Progress Bar */}
       <div className="mb-8 flex items-center justify-between relative">
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-2 bg-[#4A3B32]/10 rounded-full -z-10" />
-        <div 
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-[#98C9A3] rounded-full -z-10 transition-all duration-500"
-          style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
-        />
+        {/* Lines Container */}
+        <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 z-0">
+          {/* Background dotted line */}
+          <div className="w-full border-t-[6px] border-dotted border-[#4A3B32]/30" />
+          {/* Active dotted line */}
+          <div 
+            className="absolute top-0 left-0 border-t-[6px] border-dotted border-[#98C9A3] transition-all duration-500"
+            style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+          />
+        </div>
         
         {[1, 2, 3, 4].map((step) => (
           <div 
             key={step}
-            className={`w-12 h-12 rounded-full border-4 border-[#4A3B32] flex items-center justify-center font-black text-lg transition-colors duration-300 ${
+            className={`relative z-10 w-12 h-12 rounded-full border-4 border-[#4A3B32] flex items-center justify-center font-black text-lg transition-colors duration-300 ${
               currentStep === step 
                 ? "bg-[#F4D06F] text-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] scale-110" 
                 : currentStep > step 
@@ -122,7 +129,17 @@ export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 md:p-12 rounded-[3rem] border-4 border-[#4A3B32] shadow-[12px_12px_0px_#4A3B32] relative overflow-hidden min-h-[500px] flex flex-col">
+      <form 
+        onSubmit={(e) => {
+          if (currentStep < 4) {
+            e.preventDefault();
+            nextStep();
+          } else {
+            handleSubmit(onSubmit)(e);
+          }
+        }} 
+        className="bg-white p-8 md:p-12 rounded-[3rem] border-4 border-[#4A3B32] shadow-[12px_12px_0px_#4A3B32] relative overflow-hidden min-h-[500px] flex flex-col"
+      >
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(#4A3B32 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
 
         <div className="flex-1 relative z-10">
@@ -518,6 +535,7 @@ export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
         <div className="flex items-center justify-between pt-6 relative z-10">
           {currentStep > 1 ? (
             <motion.button
+              key="btn-back"
               type="button"
               onClick={prevStep}
               whileHover={{ scale: 1.05, y: -2 }}
@@ -528,11 +546,12 @@ export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
               Back
             </motion.button>
           ) : (
-            <div /> // Empty div to keep 'Next' button on the right
+            <div key="btn-spacer" /> // Empty div to keep 'Next' button on the right
           )}
 
           {currentStep < 4 ? (
             <motion.button
+              key="btn-next"
               type="button"
               onClick={nextStep}
               whileHover={{ scale: 1.05, y: -2 }}
@@ -544,6 +563,7 @@ export function PetWizard({ onSubmit, onPhotoSelected }: PetWizardProps) {
             </motion.button>
           ) : (
             <motion.button 
+              key="btn-submit"
               type="submit" 
               disabled={isSubmitting}
               whileHover={!isSubmitting ? { scale: 1.05, y: -4, rotate: -1 } : {}}

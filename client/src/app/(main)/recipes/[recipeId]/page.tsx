@@ -17,7 +17,7 @@ export default function RecipeDetailPage() {
   const saveRecipe = useSaveRecipe();
   const deleteRecipe = useDeleteRecipe();
 
-  if (isLoading) return <LoadingSpinner message="Loading recipe..." />;
+  if (isLoading) return <LoadingSpinner message="Loading recipe..." color="orange" />;
   if (error) return <ErrorAlert message="Failed to load recipe" />;
   if (!recipe) return null;
 

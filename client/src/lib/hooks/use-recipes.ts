@@ -6,10 +6,11 @@ import type { RecipePrecheckRequest, RecipeGenerateRequest } from "@/lib/types/r
 
 const RECIPES_KEY = ["recipes"] as const;
 
-export function useRecipes(petId?: string) {
+export function useRecipes(petId?: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: [...RECIPES_KEY, { petId }],
     queryFn: () => recipesApi.list(petId),
+    ...options,
   });
 }
 
