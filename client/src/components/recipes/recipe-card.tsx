@@ -13,31 +13,31 @@ interface RecipeCardProps {
 
 export function RecipeCard({ recipe }: RecipeCardProps) {
   return (
-    <Link href={`/recipes/${recipe.id}`} className="group">
-      <Card className="transition-colors hover:bg-accent/50">
-        <CardContent className="flex flex-col gap-3 p-4">
+    <Link href={`/recipes/${recipe.id}`} className="block h-full group">
+      <Card className="h-full border-4 border-[#4A3B32] bg-white transition-all group-hover:-translate-y-1 group-hover:shadow-[8px_8px_0px_#4A3B32] overflow-hidden rounded-[2.5rem]">
+        <CardContent className="flex flex-col gap-4 p-6">
           <div className="flex items-start justify-between">
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-medium">{recipe.title}</h3>
+              <h3 className="truncate font-black text-xl text-[#4A3B32]">{recipe.title}</h3>
               {recipe.petName && (
-                <p className="text-sm text-muted-foreground">For {recipe.petName}</p>
+                <p className="text-base font-bold text-[#4A3B32]/70">For {recipe.petName}</p>
               )}
             </div>
-            <ChevronRightIcon className="mt-1 size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+            <ChevronRightIcon className="mt-1 size-8 shrink-0 text-[#4A3B32] transition-transform group-hover:translate-x-1" strokeWidth={3} />
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <ClockIcon className="size-3.5" /> {recipe.prepTimeMinutes} min
+          <div className="flex flex-wrap items-center gap-4 text-sm font-bold text-[#4A3B32]/70">
+            <span className="flex items-center gap-1.5 bg-[#FFF9F2] px-3 py-1.5 rounded-full border-2 border-[#4A3B32]/10">
+              <ClockIcon className="size-4" strokeWidth={3} /> {recipe.prepTimeMinutes} min
             </span>
-            <span className="flex items-center gap-1">
-              <FlameIcon className="size-3.5" /> {recipe.estimatedCalories} kcal
+            <span className="flex items-center gap-1.5 bg-[#FFF9F2] px-3 py-1.5 rounded-full border-2 border-[#4A3B32]/10">
+              <FlameIcon className="size-4" strokeWidth={3} /> {recipe.estimatedCalories} kcal
             </span>
             <SafetyBadge riskLevel={recipe.riskLevel} />
           </div>
 
           {recipe.status === "SAVED" && (
-            <Badge variant="secondary" className="self-start rounded-full">
+            <Badge variant="secondary" className="self-start">
               Saved
             </Badge>
           )}

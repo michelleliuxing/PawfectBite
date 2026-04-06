@@ -26,7 +26,7 @@ export default function NewPetPage() {
     if (status === "loading") return;
 
     const savedData = sessionStorage.getItem("pending_pet_data");
-    
+
     if (savedData) {
       if (status === "authenticated" && !hasAutoSubmitted.current) {
         hasAutoSubmitted.current = true;
@@ -34,7 +34,7 @@ export default function NewPetPage() {
         try {
           const data = JSON.parse(savedData);
           sessionStorage.removeItem("pending_pet_data");
-          
+
           createPet.mutateAsync(data)
             .then(() => {
               // We can't automatically upload the photo since File objects cannot be stored in sessionStorage
@@ -63,7 +63,7 @@ export default function NewPetPage() {
         }
       }
     }
-    
+
     setIsRestoring(false);
   }, [status, createPet, router]);
 
@@ -87,17 +87,17 @@ export default function NewPetPage() {
 
   if (isRestoring || isAutoSubmitting) {
     return (
-      <LoadingSpinner 
-        message={isAutoSubmitting ? "Creating pet profile..." : "Loading..."} 
-        color="pink" 
-        className="min-h-[500px]" 
+      <LoadingSpinner
+        message={isAutoSubmitting ? "Creating pet profile..." : "Loading..."}
+        color="pink"
+        className="min-h-[500px]"
       />
     );
   }
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      <motion.div 
+      <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="flex items-center gap-4 mb-12"

@@ -15,23 +15,23 @@ export function StepSelectPet({ onSelect }: StepSelectPetProps) {
   if (isLoading) return <LoadingSpinner message="Loading your pets..." color="yellow" />;
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm text-muted-foreground">Choose which pet this recipe is for:</p>
+    <div className="flex flex-col gap-4">
+      <p className="text-xl font-bold text-[#4A3B32]/70 mb-2">Choose which pet this recipe is for:</p>
       {pets?.map((pet) => {
         const Icon = pet.species === "DOG" ? DogIcon : CatIcon;
         return (
           <Card
             key={pet.id}
-            className="cursor-pointer transition-colors hover:bg-accent/50"
+            className="cursor-pointer rounded-[2rem] border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-all hover:scale-[1.02] hover:-translate-y-1 hover:shadow-[8px_8px_0px_#4A3B32]"
             onClick={() => onSelect(pet.id)}
           >
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Icon className="size-5" />
+            <CardContent className="flex items-center gap-6 p-6">
+              <div className="flex w-16 h-16 shrink-0 items-center justify-center rounded-full border-4 border-[#4A3B32] bg-[#F4D06F] text-[#4A3B32] shadow-[2px_2px_0px_#4A3B32]">
+                <Icon className="w-8 h-8" strokeWidth={3} />
               </div>
               <div>
-                <p className="font-medium">{pet.name}</p>
-                <p className="text-sm text-muted-foreground">{pet.breed} · {pet.weightKg}kg</p>
+                <p className="text-2xl font-black text-[#4A3B32]">{pet.name}</p>
+                <p className="text-lg font-bold text-[#4A3B32]/70">{pet.breed} · {pet.weightKg}kg</p>
               </div>
             </CardContent>
           </Card>

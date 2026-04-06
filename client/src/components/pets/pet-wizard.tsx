@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Dog, Cat, Heart, PawPrint, Calendar, Scale, Target, 
-  Activity, Home, TreePine, Map, Check, ShieldAlert, 
+import {
+  Dog, Cat, Heart, PawPrint, Calendar, Scale, Target,
+  Activity, Home, TreePine, Map, Check, ShieldAlert,
   HeartPulse, Pill, XIcon, ArrowRight, ArrowLeft, CheckCircle2
 } from "lucide-react";
 import { petFormSchema, type PetFormValues } from "@/lib/schemas/pet.schema";
@@ -107,29 +107,28 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
           {/* Background dotted line */}
           <div className="w-full border-t-[6px] border-dotted border-[#4A3B32]/30" />
           {/* Active dotted line */}
-          <div 
+          <div
             className="absolute top-0 left-0 border-t-[6px] border-dotted border-[#98C9A3] transition-all duration-500"
             style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
           />
         </div>
-        
+
         {[1, 2, 3, 4].map((step) => (
-          <div 
+          <div
             key={step}
-            className={`relative z-10 w-12 h-12 rounded-full border-4 border-[#4A3B32] flex items-center justify-center font-black text-lg transition-colors duration-300 ${
-              currentStep === step 
-                ? "bg-[#F4D06F] text-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] scale-110" 
-                : currentStep > step 
-                  ? "bg-[#98C9A3] text-white" 
+            className={`relative z-10 w-12 h-12 rounded-full border-4 border-[#4A3B32] flex items-center justify-center font-black text-lg transition-colors duration-300 ${currentStep === step
+                ? "bg-[#F4D06F] text-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] scale-110"
+                : currentStep > step
+                  ? "bg-[#98C9A3] text-white"
                   : "bg-white text-[#4A3B32]/40"
-            }`}
+              }`}
           >
             {currentStep > step ? <CheckCircle2 className="w-6 h-6" strokeWidth={3} /> : step}
           </div>
         ))}
       </div>
 
-      <form 
+      <form
         onSubmit={(e) => {
           if (currentStep < 4) {
             e.preventDefault();
@@ -137,14 +136,14 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
           } else {
             handleSubmit(onSubmit)(e);
           }
-        }} 
+        }}
         className="bg-white p-8 md:p-12 rounded-[3rem] border-4 border-[#4A3B32] shadow-[12px_12px_0px_#4A3B32] relative overflow-hidden min-h-[500px] flex flex-col"
       >
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(#4A3B32 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
 
         <div className="flex-1 relative z-10">
           <AnimatePresence mode="wait">
-            
+
             {/* STEP 1: Basics */}
             {currentStep === 1 && (
               <motion.div
@@ -204,11 +203,10 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                           key={s}
                           type="button"
                           onClick={() => setValue("species", s)}
-                          className={`flex-1 py-4 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${
-                            species === s 
-                              ? "bg-[#F4D06F] border-[#4A3B32] text-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] -translate-y-1" 
+                          className={`flex-1 py-4 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${species === s
+                              ? "bg-[#F4D06F] border-[#4A3B32] text-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] -translate-y-1"
                               : "bg-[#FFF9F2] border-[#4A3B32]/20 text-[#4A3B32]/60 hover:border-[#4A3B32]/40"
-                          }`}
+                            }`}
                         >
                           {s === "DOG" ? <Dog className="w-8 h-8" /> : <Cat className="w-8 h-8" />}
                           {s === "DOG" ? "Dog" : "Cat"}
@@ -227,11 +225,10 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                           key={s}
                           type="button"
                           onClick={() => setValue("sex", s)}
-                          className={`flex-1 py-4 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${
-                            sex === s 
-                              ? "bg-[#98C9A3] border-[#4A3B32] text-white shadow-[4px_4px_0px_#4A3B32] -translate-y-1" 
+                          className={`flex-1 py-4 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${sex === s
+                              ? "bg-[#98C9A3] border-[#4A3B32] text-white shadow-[4px_4px_0px_#4A3B32] -translate-y-1"
                               : "bg-[#FFF9F2] border-[#4A3B32]/20 text-[#4A3B32]/60 hover:border-[#4A3B32]/40"
-                          }`}
+                            }`}
                         >
                           <Heart className="w-8 h-8" strokeWidth={3} />
                           {s === "MALE" ? "Male" : "Female"}
@@ -270,8 +267,8 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                   <div className="md:col-span-2">
                     <label className="flex items-center gap-4 cursor-pointer group w-full bg-[#FFF9F2] border-4 border-[#4A3B32] rounded-2xl px-6 py-4 hover:bg-[#F4D06F]/10 transition-colors">
                       <div className="relative">
-                        <input 
-                          type="checkbox" 
+                        <input
+                          type="checkbox"
                           className="peer sr-only"
                           checked={!!isNeutered}
                           onChange={(e) => setValue("isNeutered", e.target.checked)}
@@ -317,14 +314,14 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                   <div>
                     <label className={labelClasses}><Target className="w-5 h-5 text-[#98C9A3]" /> Target Weight (Optional)</label>
                     <div className="relative">
-                      <input 
-                        type="number" 
-                        step="0.1" 
+                      <input
+                        type="number"
+                        step="0.1"
                         min={0}
-                        {...register("targetWeightKg", { 
-                          setValueAs: (v) => v === "" || Number.isNaN(Number(v)) ? undefined : Number(v) 
-                        })} 
-                        className={`${inputClasses} pr-12`} 
+                        {...register("targetWeightKg", {
+                          setValueAs: (v) => v === "" || Number.isNaN(Number(v)) ? undefined : Number(v)
+                        })}
+                        className={`${inputClasses} pr-12`}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-[#4A3B32]/40">kg</span>
                     </div>
@@ -344,11 +341,10 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                           key={level.val}
                           type="button"
                           onClick={() => setValue("activityLevel", level.val as PetFormValues["activityLevel"])}
-                          className={`py-4 px-2 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${
-                            activityLevel === level.val 
-                              ? "bg-[#E88D72] border-[#4A3B32] text-white shadow-[4px_4px_0px_#4A3B32] -translate-y-1" 
+                          className={`py-4 px-2 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${activityLevel === level.val
+                              ? "bg-[#E88D72] border-[#4A3B32] text-white shadow-[4px_4px_0px_#4A3B32] -translate-y-1"
                               : "bg-[#FFF9F2] border-[#4A3B32]/20 text-[#4A3B32]/60 hover:border-[#4A3B32]/40"
-                          }`}
+                            }`}
                         >
                           <level.icon className="w-6 h-6" />
                           <span className="text-sm">{level.label}</span>
@@ -371,11 +367,10 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                           key={env.val}
                           type="button"
                           onClick={() => setValue("livingEnvironment", env.val as PetFormValues["livingEnvironment"])}
-                          className={`flex-1 py-4 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${
-                            livingEnvironment === env.val 
-                              ? "bg-[#F4D06F] border-[#4A3B32] text-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] -translate-y-1" 
+                          className={`flex-1 py-4 rounded-2xl font-black border-4 transition-all flex flex-col items-center gap-2 ${livingEnvironment === env.val
+                              ? "bg-[#F4D06F] border-[#4A3B32] text-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] -translate-y-1"
                               : "bg-[#FFF9F2] border-[#4A3B32]/20 text-[#4A3B32]/60 hover:border-[#4A3B32]/40"
-                          }`}
+                            }`}
                         >
                           <env.icon className="w-6 h-6" />
                           <span className="text-sm">{env.label}</span>
@@ -410,8 +405,8 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                           className={`${inputClasses} px-3 py-2 text-sm bg-white`}
                           placeholder={`Add ${label.toLowerCase()}...`}
                         />
-                        <motion.button 
-                          type="button" 
+                        <motion.button
+                          type="button"
                           whileHover={{ scale: 1.05, y: -2 }}
                           whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
                           onClick={() => addTag(field, inputKey)}
@@ -423,8 +418,8 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                       {items.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-4">
                           {items.map((item, i) => (
-                            <span 
-                              key={i} 
+                            <span
+                              key={i}
                               className={`${color} ${color === 'bg-[#F4D06F]' ? 'text-[#4A3B32]' : 'text-white'} px-4 py-1.5 rounded-full border-2 border-[#4A3B32] font-bold text-sm shadow-[2px_2px_0px_#4A3B32] flex items-center gap-2`}
                             >
                               {item}
@@ -495,36 +490,36 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
                     </div>
                   </div>
 
-                  {((formValues.allergies && formValues.allergies.length > 0) || 
-                    (formValues.medicalConditions && formValues.medicalConditions.length > 0) || 
+                  {((formValues.allergies && formValues.allergies.length > 0) ||
+                    (formValues.medicalConditions && formValues.medicalConditions.length > 0) ||
                     (formValues.medications && formValues.medications.length > 0)) && (
-                    <div className="flex flex-col gap-3 pt-4 border-t-4 border-[#4A3B32]/10">
-                      {formValues.allergies && formValues.allergies.length > 0 && (
-                        <div>
-                          <span className="text-xs font-black text-[#4A3B32]/50 uppercase tracking-wider block mb-1">Allergies</span>
-                          <div className="flex flex-wrap gap-2">
-                            {formValues.allergies.map((a: string) => <span key={a} className="bg-[#E88D72] text-white px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">{a}</span>)}
+                      <div className="flex flex-col gap-3 pt-4 border-t-4 border-[#4A3B32]/10">
+                        {formValues.allergies && formValues.allergies.length > 0 && (
+                          <div>
+                            <span className="text-xs font-black text-[#4A3B32]/50 uppercase tracking-wider block mb-1">Allergies</span>
+                            <div className="flex flex-wrap gap-2">
+                              {formValues.allergies.map((a: string) => <span key={a} className="bg-[#E88D72] text-white px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">{a}</span>)}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {formValues.medicalConditions && formValues.medicalConditions.length > 0 && (
-                        <div>
-                          <span className="text-xs font-black text-[#4A3B32]/50 uppercase tracking-wider block mb-1">Medical Conditions</span>
-                          <div className="flex flex-wrap gap-2">
-                            {formValues.medicalConditions.map((c: string) => <span key={c} className="bg-[#F4D06F] text-[#4A3B32] px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">{c}</span>)}
+                        )}
+                        {formValues.medicalConditions && formValues.medicalConditions.length > 0 && (
+                          <div>
+                            <span className="text-xs font-black text-[#4A3B32]/50 uppercase tracking-wider block mb-1">Medical Conditions</span>
+                            <div className="flex flex-wrap gap-2">
+                              {formValues.medicalConditions.map((c: string) => <span key={c} className="bg-[#F4D06F] text-[#4A3B32] px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">{c}</span>)}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {formValues.medications && formValues.medications.length > 0 && (
-                        <div>
-                          <span className="text-xs font-black text-[#4A3B32]/50 uppercase tracking-wider block mb-1">Medications</span>
-                          <div className="flex flex-wrap gap-2">
-                            {formValues.medications.map((m: string) => <span key={m} className="bg-white text-[#4A3B32] px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">{m}</span>)}
+                        )}
+                        {formValues.medications && formValues.medications.length > 0 && (
+                          <div>
+                            <span className="text-xs font-black text-[#4A3B32]/50 uppercase tracking-wider block mb-1">Medications</span>
+                            <div className="flex flex-wrap gap-2">
+                              {formValues.medications.map((m: string) => <span key={m} className="bg-white text-[#4A3B32] px-3 py-1 rounded-full text-xs font-bold border-2 border-[#4A3B32]">{m}</span>)}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        )}
+                      </div>
+                    )}
                 </div>
               </motion.div>
             )}
@@ -562,15 +557,14 @@ export function PetWizard({ onSubmit, onPhotoSelected, defaultValues }: PetWizar
               <ArrowRight className="w-5 h-5" strokeWidth={3} />
             </motion.button>
           ) : (
-            <motion.button 
+            <motion.button
               key="btn-submit"
-              type="submit" 
+              type="submit"
               disabled={isSubmitting}
               whileHover={!isSubmitting ? { scale: 1.05, y: -4, rotate: -1 } : {}}
               whileTap={!isSubmitting ? { scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" } : {}}
-              className={`flex items-center gap-3 bg-[#F7B2B7] text-[#4A3B32] px-10 py-4 rounded-full font-black text-lg border-4 border-[#4A3B32] transition-all ${
-                isSubmitting ? "opacity-70 cursor-not-allowed" : "shadow-[6px_6px_0px_#4A3B32]"
-              }`}
+              className={`flex items-center gap-3 bg-[#F7B2B7] text-[#4A3B32] px-10 py-4 rounded-full font-black text-lg border-4 border-[#4A3B32] transition-all ${isSubmitting ? "opacity-70 cursor-not-allowed" : "shadow-[6px_6px_0px_#4A3B32]"
+                }`}
             >
               {isSubmitting ? (
                 <div className="w-5 h-5 border-4 border-[#4A3B32] border-t-white rounded-full animate-spin" />

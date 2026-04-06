@@ -125,7 +125,7 @@ export default function CalendarPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-[1rem] border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32]"
+          className="bg-white rounded-[2.5rem] shadow-[8px_8px_0px_#4A3B32]"
         >
           <CalendarGrid
             petId={activePetId}

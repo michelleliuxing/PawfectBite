@@ -27,21 +27,21 @@ export default function RecipeDetailPage() {
         title={recipe.title}
         description={recipe.petName ? `Recipe for ${recipe.petName}` : undefined}
         action={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             {recipe.status !== "SAVED" && (
               <button
                 onClick={() => saveRecipe.mutateAsync(recipeId)}
                 disabled={saveRecipe.isPending}
-                className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
+                className="flex items-center gap-2 rounded-full border-4 border-[#4A3B32] bg-[#F4D06F] text-[#4A3B32] px-6 py-2 font-black shadow-[4px_4px_0px_#4A3B32] transition-all hover:scale-[1.05] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#4A3B32] active:scale-95 active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:pointer-events-none"
               >
-                <Bookmark className="size-4" />
+                <Bookmark className="size-5" strokeWidth={3} />
                 Save
               </button>
             )}
             <ConfirmDialog
               trigger={
-                <button className="inline-flex items-center gap-2 rounded-lg border border-destructive/30 px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10">
-                  <Trash2 className="size-4" />
+                <button className="flex items-center gap-2 rounded-full border-4 border-[#4A3B32] bg-[#E88D72] text-white px-6 py-2 font-black shadow-[4px_4px_0px_#4A3B32] transition-all hover:scale-[1.05] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#4A3B32] active:scale-95 active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:pointer-events-none">
+                  <Trash2 className="size-5" strokeWidth={3} />
                   Delete
                 </button>
               }

@@ -71,12 +71,12 @@ export function StepPreferences({ onSubmit, isLoading, onBack }: StepPreferences
           </Button>
         </div>
         {includes.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2 mt-2">
             {includes.map((t, i) => (
-              <Badge key={i} className="gap-1 rounded-full bg-emerald-500/10 pr-1 text-emerald-700 hover:bg-emerald-500/10">
+              <Badge key={i} className="gap-2 rounded-full border-4 border-[#4A3B32] bg-[#98C9A3] pr-1 pl-4 py-1 text-base font-bold text-white shadow-[2px_2px_0px_#4A3B32]">
                 {t}
-                <button onClick={() => removeTag(i, includes, setIncludes)} className="ml-0.5 rounded-full p-0.5 hover:bg-foreground/10">
-                  <XIcon className="size-3" />
+                <button onClick={() => removeTag(i, includes, setIncludes)} className="ml-1 rounded-full p-1 bg-white border-2 border-[#4A3B32] text-[#4A3B32] hover:bg-[#FFF9F2] transition-colors">
+                  <XIcon className="size-4" strokeWidth={3} />
                 </button>
               </Badge>
             ))}
@@ -104,12 +104,12 @@ export function StepPreferences({ onSubmit, isLoading, onBack }: StepPreferences
           </Button>
         </div>
         {excludes.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2 mt-2">
             {excludes.map((t, i) => (
-              <Badge key={i} className="gap-1 rounded-full bg-red-500/10 pr-1 text-red-700 hover:bg-red-500/10">
+              <Badge key={i} className="gap-2 rounded-full border-4 border-[#4A3B32] bg-[#F7B2B7] pr-1 pl-4 py-1 text-base font-bold text-[#4A3B32] shadow-[2px_2px_0px_#4A3B32]">
                 {t}
-                <button onClick={() => removeTag(i, excludes, setExcludes)} className="ml-0.5 rounded-full p-0.5 hover:bg-foreground/10">
-                  <XIcon className="size-3" />
+                <button onClick={() => removeTag(i, excludes, setExcludes)} className="ml-1 rounded-full p-1 bg-white border-2 border-[#4A3B32] text-[#4A3B32] hover:bg-[#FFF9F2] transition-colors">
+                  <XIcon className="size-4" strokeWidth={3} />
                 </button>
               </Badge>
             ))}

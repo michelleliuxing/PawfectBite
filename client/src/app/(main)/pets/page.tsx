@@ -16,7 +16,7 @@ export default function PetsPage() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
       transition: { staggerChildren: 0.1 }
     }
@@ -24,8 +24,8 @@ export default function PetsPage() {
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0, scale: 0.95 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
       scale: 1,
       transition: { type: "spring", stiffness: 300, damping: 24 }
@@ -40,7 +40,7 @@ export default function PetsPage() {
         <div className="absolute bottom-40 left-10 w-80 h-80 bg-[#F7B2B7]/10 rounded-full blur-3xl" />
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-12"
@@ -56,7 +56,7 @@ export default function PetsPage() {
         </div>
 
         <Link href="/pets/new">
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95, y: 2, boxShadow: "0px 0px 0px #4A3B32" }}
             className="flex items-center gap-2 bg-[#98C9A3] text-white px-6 py-3 rounded-full font-black border-4 border-[#4A3B32] shadow-[4px_4px_0px_#4A3B32] transition-colors"
@@ -70,7 +70,7 @@ export default function PetsPage() {
       {isLoading && <LoadingSpinner message="Loading your pets..." color="yellow" />}
 
       {error && (
-        <motion.div 
+        <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           className="bg-[#FFF9F2] p-8 rounded-[2rem] border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] text-center max-w-lg mx-auto"
@@ -84,24 +84,24 @@ export default function PetsPage() {
       )}
 
       {!isLoading && !error && (!pets || pets.length === 0) && (
-        <motion.div 
+        <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           className="bg-white p-12 md:p-16 rounded-[3rem] border-4 border-[#4A3B32] shadow-[12px_12px_0px_#4A3B32] flex flex-col items-center text-center relative overflow-hidden"
         >
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#4A3B32 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
-          
+
           <div className="flex gap-6 mb-10 relative z-10">
-            <motion.div 
-              animate={{ y: [0, -15, 0], rotate: [0, -10, 0] }} 
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} 
+            <motion.div
+              animate={{ y: [0, -15, 0], rotate: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
               className="w-24 h-24 bg-[#F4D06F] rounded-[2rem] border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] flex items-center justify-center"
             >
               <Dog className="w-12 h-12 text-white" />
             </motion.div>
-            <motion.div 
-              animate={{ y: [0, 15, 0], rotate: [0, 10, 0] }} 
-              transition={{ repeat: Infinity, duration: 5, delay: 1, ease: "easeInOut" }} 
+            <motion.div
+              animate={{ y: [0, 15, 0], rotate: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 5, delay: 1, ease: "easeInOut" }}
               className="w-24 h-24 bg-[#E88D72] rounded-[2rem] border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] flex items-center justify-center"
             >
               <Cat className="w-12 h-12 text-white" />
@@ -114,7 +114,7 @@ export default function PetsPage() {
           </p>
 
           <Link href="/pets/new" className="relative z-10">
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05, y: -4, rotate: -2 }}
               whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
               className="flex items-center gap-3 bg-[#F7B2B7] text-[#4A3B32] px-10 py-5 rounded-full font-black text-2xl border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] transition-all"

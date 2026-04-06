@@ -57,7 +57,7 @@ export default function PetDetailPage() {
               Edit
             </motion.div>
           </Link>
-          
+
           <ConfirmDialog
             trigger={
               <motion.button
