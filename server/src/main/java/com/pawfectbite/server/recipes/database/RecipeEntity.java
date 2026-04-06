@@ -6,6 +6,8 @@ import com.pawfectbite.server.recipes.domain.RecipeStatus;
 import com.pawfectbite.server.safety.domain.RiskLevel;
 import com.pawfectbite.server.safety.domain.SafetyWarning;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,9 +38,11 @@ public class RecipeEntity extends AuditableEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "ingredients", columnDefinition = "JSONB", nullable = false)
     private String ingredientsJson;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "steps", columnDefinition = "JSONB", nullable = false)
     private String stepsJson;
 
@@ -48,6 +52,7 @@ public class RecipeEntity extends AuditableEntity {
     @Column(name = "feeding_portions")
     private String feedingPortions;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "shopping_list", columnDefinition = "JSONB")
     private String shoppingListJson;
 
@@ -57,6 +62,7 @@ public class RecipeEntity extends AuditableEntity {
     @Column(name = "storage_guidance", columnDefinition = "TEXT")
     private String storageGuidance;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "caution_notes", columnDefinition = "JSONB")
     private String cautionNotesJson;
 
@@ -64,6 +70,7 @@ public class RecipeEntity extends AuditableEntity {
     @Column(name = "risk_level", nullable = false, length = 10)
     private RiskLevel riskLevel;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "warnings", columnDefinition = "JSONB")
     private String warningsJson;
 
