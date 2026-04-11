@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar as CalendarIcon, Plus, Dog, Cat } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, Dog, Cat, Users } from "lucide-react";
 import { usePets } from "@/lib/hooks/use-pets";
 import { CalendarGrid } from "@/components/calendar/calendar-grid";
 import { CalendarEntryDialog } from "@/components/calendar/calendar-entry-dialog";
-import type { CalendarEntry } from "@/lib/types/calendar.types";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
@@ -16,13 +15,11 @@ export default function CalendarPage() {
   const isAuthenticated = status === "authenticated";
   const { data: pets, isLoading: isPetsLoading } = usePets({ enabled: isAuthenticated });
   const isLoading = status === "loading" || (isAuthenticated && isPetsLoading);
-  const [selectedPetId, setSelectedPetId] = useState<string>("");
-  const [dialogState, setDialogState] = useState<{
-    date: string;
-    entries: CalendarEntry[];
-  } | null>(null);
+  const [selectedPetId, setSelectedPetId] = useState<string>("all");
+  const [dialogState, setDialogState] = useState<{ date: string } | null>(null);
 
-  const activePetId = selectedPetId || pets?.[0]?.id || "";
+  const isAllPets = selectedPetId === "all";
+  const activePetId = isAllPets ? "" : (selectedPetId || pets?.[0]?.id || "");
 
   if (isLoading) {
     return <LoadingSpinner message="Loading calendar..." color="green" />;
@@ -105,6 +102,17 @@ export default function CalendarPage() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8 flex flex-wrap gap-3"
       >
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setSelectedPetId("all")}
+          className={`px-5 py-2 rounded-full font-bold border-2 border-[#4A3B32] transition-colors flex items-center gap-2 ${
+            isAllPets ? "bg-[#4A3B32] text-white shadow-[2px_2px_0px_#4A3B32]" : "bg-white text-[#4A3B32] hover:bg-[#FFF9F2]"
+          }`}
+        >
+          <Users className="w-4 h-4" />
+          All Pets
+        </motion.button>
         {pets.map((pet) => (
           <motion.button
             key={pet.id}
@@ -112,7 +120,7 @@ export default function CalendarPage() {
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedPetId(pet.id)}
             className={`px-5 py-2 rounded-full font-bold border-2 border-[#4A3B32] transition-colors flex items-center gap-2 ${
-              activePetId === pet.id ? "bg-[#4A3B32] text-white shadow-[2px_2px_0px_#4A3B32]" : "bg-white text-[#4A3B32] hover:bg-[#FFF9F2]"
+              activePetId === pet.id && !isAllPets ? "bg-[#4A3B32] text-white shadow-[2px_2px_0px_#4A3B32]" : "bg-white text-[#4A3B32] hover:bg-[#FFF9F2]"
             }`}
           >
             {pet.species === 'DOG' ? <Dog className="w-4 h-4" /> : <Cat className="w-4 h-4" />}
@@ -121,24 +129,31 @@ export default function CalendarPage() {
         ))}
       </motion.div>
 
-      {activePetId && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-[2.5rem] shadow-[8px_8px_0px_#4A3B32]"
-        >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white rounded-[2.5rem] shadow-[8px_8px_0px_#4A3B32]"
+      >
+        {isAllPets ? (
           <CalendarGrid
-            petId={activePetId}
-            onDayClick={(date, entries) => setDialogState({ date, entries })}
+            petIds={pets.map((p) => p.id)}
+            onDayClick={(date) => setDialogState({ date })}
           />
-        </motion.div>
-      )}
+        ) : (
+          activePetId && (
+            <CalendarGrid
+              petId={activePetId}
+              onDayClick={(date) => setDialogState({ date })}
+            />
+          )
+        )}
+      </motion.div>
 
       {dialogState && (
         <CalendarEntryDialog
-          petId={activePetId}
           date={dialogState.date}
-          existingEntries={dialogState.entries}
+          petId={activePetId}
+          isAllPets={isAllPets}
           onClose={() => setDialogState(null)}
         />
       )}

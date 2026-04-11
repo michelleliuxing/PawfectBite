@@ -12,21 +12,24 @@ import {
   prevMonth,
   formatDate,
 } from "@/lib/utils/format";
-import { useCalendarEntries } from "@/lib/hooks/use-calendar";
+import { useCalendarEntries, useAllCalendarEntries } from "@/lib/hooks/use-calendar";
 import { cn } from "@/lib/utils";
 import type { CalendarEntry } from "@/lib/types/calendar.types";
 
 interface CalendarGridProps {
-  petId: string;
+  petId?: string;
+  petIds?: string[];
   onDayClick: (date: string, entries: CalendarEntry[]) => void;
 }
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export function CalendarGrid({ petId, onDayClick }: CalendarGridProps) {
+export function CalendarGrid({ petId, petIds, onDayClick }: CalendarGridProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const monthStr = getMonthString(currentMonth);
-  const { data: entries } = useCalendarEntries(petId, monthStr);
+  const { data: singleEntries } = useCalendarEntries(petId ?? "", monthStr);
+  const { data: combinedEntries } = useAllCalendarEntries(petIds ?? [], monthStr);
+  const entries = petIds ? combinedEntries : singleEntries;
 
   const days = getCalendarDays(currentMonth);
   const startPad = getStartPadding(currentMonth);

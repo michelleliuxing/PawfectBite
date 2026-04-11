@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueries, useMutation, useQueryClient } from "@tanstack/react-query";
 import { calendarApi } from "@/lib/api/calendar.api";
 import type {
   CreateCalendarEntryRequest,
@@ -14,6 +14,20 @@ export function useCalendarEntries(petId: string, month: string) {
     queryKey: [...CALENDAR_KEY, petId, month],
     queryFn: () => calendarApi.getEntries(petId, month),
     enabled: !!petId && !!month,
+  });
+}
+
+export function useAllCalendarEntries(petIds: string[], month: string) {
+  return useQueries({
+    queries: petIds.map((petId) => ({
+      queryKey: [...CALENDAR_KEY, petId, month],
+      queryFn: () => calendarApi.getEntries(petId, month),
+      enabled: petIds.length > 0 && !!month,
+    })),
+    combine: (results) => ({
+      data: results.flatMap((r) => r.data ?? []),
+      isLoading: results.some((r) => r.isLoading),
+    }),
   });
 }
 
