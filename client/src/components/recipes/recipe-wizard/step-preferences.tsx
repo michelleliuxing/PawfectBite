@@ -12,8 +12,6 @@ interface StepPreferencesProps {
     goal: string;
     ingredientsToInclude: string[];
     ingredientsToExclude: string[];
-    budget: string;
-    prepTimeMinutes: number;
   }) => void;
   isLoading: boolean;
   onBack: () => void;
@@ -25,9 +23,6 @@ export function StepPreferences({ onSubmit, isLoading, onBack }: StepPreferences
   const [excludeInput, setExcludeInput] = useState("");
   const [includes, setIncludes] = useState<string[]>([]);
   const [excludes, setExcludes] = useState<string[]>([]);
-  const [budget, setBudget] = useState("");
-  const [prepTime, setPrepTime] = useState(30);
-
   const addTag = (value: string, list: string[], setter: (v: string[]) => void, inputSetter: (v: string) => void) => {
     const trimmed = value.trim();
     if (trimmed && !list.includes(trimmed)) {
@@ -117,34 +112,13 @@ export function StepPreferences({ onSubmit, isLoading, onBack }: StepPreferences
         )}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1.5">
-          <Label>Budget</Label>
-          <Input
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-            placeholder="e.g. Under $20/week"
-          />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label>Prep Time (minutes)</Label>
-          <Input
-            type="number"
-            value={prepTime}
-            onChange={(e) => setPrepTime(Number(e.target.value))}
-            min={5}
-            max={180}
-          />
-        </div>
-      </div>
-
       <div className="flex justify-between pt-2">
         <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
         <Button
-          onClick={() => onSubmit({ goal, ingredientsToInclude: includes, ingredientsToExclude: excludes, budget, prepTimeMinutes: prepTime })}
-          disabled={!goal || !budget || isLoading}
+          onClick={() => onSubmit({ goal, ingredientsToInclude: includes, ingredientsToExclude: excludes })}
+          disabled={!goal || isLoading}
         >
           {isLoading ? "Checking safety..." : "Run Safety Check"}
         </Button>

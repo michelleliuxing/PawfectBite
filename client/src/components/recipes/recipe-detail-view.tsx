@@ -1,4 +1,4 @@
-import { ClockIcon, FlameIcon, ShoppingCartIcon, TriangleAlertIcon } from "lucide-react";
+import { FlameIcon, ShoppingCartIcon, TriangleAlertIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
@@ -23,10 +23,6 @@ export function RecipeDetailView({ recipe }: RecipeDetailViewProps) {
       </div>
 
       <div className="flex flex-wrap gap-4 text-base font-bold text-[#4A3B32]/70">
-        <div className="flex items-center gap-2 bg-[#FFF9F2] px-4 py-2 rounded-full border-2 border-[#4A3B32]/10">
-          <ClockIcon className="size-5" strokeWidth={3} />
-          {recipe.prepTimeMinutes} min
-        </div>
         <div className="flex items-center gap-2 bg-[#FFF9F2] px-4 py-2 rounded-full border-2 border-[#4A3B32]/10">
           <FlameIcon className="size-5" strokeWidth={3} />
           {recipe.estimatedCalories} kcal

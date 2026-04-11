@@ -20,8 +20,6 @@ export default function GenerateRecipePage() {
     goal: "",
     ingredientsToInclude: [] as string[],
     ingredientsToExclude: [] as string[],
-    budget: "",
-    prepTimeMinutes: 30,
   });
   const [precheckResult, setPrecheckResult] = useState<PrecheckResult | null>(null);
   const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null);

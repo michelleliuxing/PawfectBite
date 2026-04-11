@@ -31,7 +31,6 @@ export interface Recipe {
   estimatedCalories: number;
   feedingPortions: string;
   shoppingList: string[];
-  prepTimeMinutes: number;
   storageGuidance: string;
   cautionNotes: string[];
   riskLevel: RiskLevel;
@@ -52,6 +51,4 @@ export interface RecipeGenerateRequest {
   goal: string;
   ingredientsToInclude: string[];
   ingredientsToExclude: string[];
-  budget: string;
-  prepTimeMinutes: number;
 }

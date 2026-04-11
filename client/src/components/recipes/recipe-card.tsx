@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ClockIcon, FlameIcon, ChevronRightIcon } from "lucide-react";
+import { FlameIcon, ChevronRightIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SafetyBadge } from "./safety-badge";
@@ -27,9 +27,6 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 text-sm font-bold text-[#4A3B32]/70">
-            <span className="flex items-center gap-1.5 bg-[#FFF9F2] px-3 py-1.5 rounded-full border-2 border-[#4A3B32]/10">
-              <ClockIcon className="size-4" strokeWidth={3} /> {recipe.prepTimeMinutes} min
-            </span>
             <span className="flex items-center gap-1.5 bg-[#FFF9F2] px-3 py-1.5 rounded-full border-2 border-[#4A3B32]/10">
               <FlameIcon className="size-4" strokeWidth={3} /> {recipe.estimatedCalories} kcal
             </span>
