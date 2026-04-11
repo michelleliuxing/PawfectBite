@@ -56,9 +56,6 @@ public class RecipeEntity extends AuditableEntity {
     @Column(name = "shopping_list", columnDefinition = "JSONB")
     private String shoppingListJson;
 
-    @Column(name = "prep_time_minutes")
-    private int prepTimeMinutes;
-
     @Column(name = "storage_guidance", columnDefinition = "TEXT")
     private String storageGuidance;
 
@@ -98,7 +95,6 @@ public class RecipeEntity extends AuditableEntity {
     public void setEstimatedCalories(int cal) { this.estimatedCalories = cal; }
     public void setFeedingPortions(String portions) { this.feedingPortions = portions; }
     public void setShoppingListJson(String json) { this.shoppingListJson = json; }
-    public void setPrepTimeMinutes(int minutes) { this.prepTimeMinutes = minutes; }
     public void setStorageGuidance(String guidance) { this.storageGuidance = guidance; }
     public void setCautionNotesJson(String json) { this.cautionNotesJson = json; }
     public void setRiskLevel(RiskLevel level) { this.riskLevel = level; }
@@ -112,7 +108,6 @@ public class RecipeEntity extends AuditableEntity {
     public String getWarningsJson() { return warningsJson; }
     public int getEstimatedCalories() { return estimatedCalories; }
     public String getFeedingPortions() { return feedingPortions; }
-    public int getPrepTimeMinutes() { return prepTimeMinutes; }
     public String getStorageGuidance() { return storageGuidance; }
     public String getDescription() { return description; }
     public UUID getRequestId() { return requestId; }

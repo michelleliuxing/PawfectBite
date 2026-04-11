@@ -14,8 +14,6 @@ public record RecipeRequest(
         String goal,
         List<String> ingredientsToInclude,
         List<String> ingredientsToExclude,
-        String budget,
-        Integer prepTimeMinutes,
         RiskLevel riskLevel,
         List<SafetyWarning> safetyWarnings,
         Instant createdAt

@@ -20,7 +20,6 @@ public record GeneratedRecipe(
         int estimatedCalories,
         String feedingPortions,
         List<String> shoppingList,
-        int prepTimeMinutes,
         String storageGuidance,
         List<String> cautionNotes,
         RiskLevel riskLevel,

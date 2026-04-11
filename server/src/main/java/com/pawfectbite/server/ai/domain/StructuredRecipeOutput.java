@@ -10,7 +10,6 @@ public record StructuredRecipeOutput(
         int estimatedCalories,
         String feedingPortions,
         List<String> shoppingList,
-        int prepTimeMinutes,
         String storageGuidance,
         List<String> cautionNotes
 ) {

@@ -26,8 +26,6 @@ public class RecipePlanBuilder {
             String goal,
             List<String> ingredientsToInclude,
             List<String> ingredientsToExclude,
-            String budget,
-            int prepTimeMinutes,
             SafetyResult safetyResult
     ) {
         RetrievedKnowledge knowledge = knowledgeService.retrieve(pet, ingredientsToInclude);
@@ -42,7 +40,7 @@ public class RecipePlanBuilder {
 
         return new RecipePlan(
                 pet, goal, ingredientsToInclude, ingredientsToExclude,
-                budget, prepTimeMinutes, safetyResult, knowledgeContext
+                safetyResult, knowledgeContext
         );
     }
 }

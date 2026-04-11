@@ -10,8 +10,6 @@ public record RecipePlan(
         String goal,
         List<String> approvedIngredients,
         List<String> excludedIngredients,
-        String budget,
-        int prepTimeMinutes,
         SafetyResult safetyResult,
         List<String> knowledgeContext
 ) {}

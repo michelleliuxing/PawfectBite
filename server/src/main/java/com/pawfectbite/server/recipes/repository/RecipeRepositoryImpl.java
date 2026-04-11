@@ -38,7 +38,6 @@ public class RecipeRepositoryImpl implements RecipeRepository {
         entity.setEstimatedCalories(recipe.estimatedCalories());
         entity.setFeedingPortions(recipe.feedingPortions());
         entity.setShoppingListJson(toJson(recipe.shoppingList()));
-        entity.setPrepTimeMinutes(recipe.prepTimeMinutes());
         entity.setStorageGuidance(recipe.storageGuidance());
         entity.setCautionNotesJson(toJson(recipe.cautionNotes()));
         entity.setRiskLevel(recipe.riskLevel());
@@ -88,7 +87,7 @@ public class RecipeRepositoryImpl implements RecipeRepository {
                 fromJson(e.getStepsJson(), new TypeReference<>() {}),
                 e.getEstimatedCalories(), e.getFeedingPortions(),
                 fromJson(e.getShoppingListJson(), new TypeReference<>() {}),
-                e.getPrepTimeMinutes(), e.getStorageGuidance(),
+                e.getStorageGuidance(),
                 fromJson(e.getCautionNotesJson(), new TypeReference<>() {}),
                 e.getRiskLevel(),
                 fromJson(e.getWarningsJson(), new TypeReference<>() {}),

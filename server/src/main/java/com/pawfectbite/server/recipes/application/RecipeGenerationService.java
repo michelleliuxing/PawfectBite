@@ -82,7 +82,7 @@ public class RecipeGenerationService {
         // Step 5: Build recipe plan (includes knowledge retrieval)
         RecipePlan plan = planBuilder.build(
                 pet, request.goal(), ingredientsToInclude, ingredientsToExclude,
-                request.budget(), request.prepTimeMinutes(), safetyResult
+                safetyResult
         );
 
         // Step 6: LLM generation
@@ -97,7 +97,7 @@ public class RecipeGenerationService {
                         .toList(),
                 llmOutput.steps(), llmOutput.estimatedCalories(),
                 llmOutput.feedingPortions(), llmOutput.shoppingList(),
-                llmOutput.prepTimeMinutes(), llmOutput.storageGuidance(),
+                llmOutput.storageGuidance(),
                 llmOutput.cautionNotes(), safetyResult.riskLevel(),
                 safetyResult.warnings(), RecipeStatus.DRAFT, null
         );

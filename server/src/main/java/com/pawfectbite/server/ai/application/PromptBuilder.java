@@ -32,7 +32,6 @@ public class PromptBuilder {
                   "estimatedCalories": number,
                   "feedingPortions": "string",
                   "shoppingList": ["string"],
-                  "prepTimeMinutes": number,
                   "storageGuidance": "string",
                   "cautionNotes": ["string"]
                 }
@@ -68,8 +67,6 @@ public class PromptBuilder {
 
         sb.append("\n=== RECIPE REQUEST ===\n");
         sb.append("Goal: ").append(plan.goal()).append("\n");
-        sb.append("Budget: ").append(plan.budget()).append("\n");
-        sb.append("Max prep time: ").append(plan.prepTimeMinutes()).append(" minutes\n");
 
         if (!plan.approvedIngredients().isEmpty()) {
             sb.append("Include ingredients: ").append(String.join(", ", plan.approvedIngredients())).append("\n");

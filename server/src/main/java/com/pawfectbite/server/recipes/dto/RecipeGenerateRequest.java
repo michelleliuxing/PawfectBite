@@ -9,7 +9,5 @@ public record RecipeGenerateRequest(
         @NotNull UUID petId,
         @NotBlank String goal,
         List<String> ingredientsToInclude,
-        List<String> ingredientsToExclude,
-        @NotBlank String budget,
-        @Min(5) @Max(180) int prepTimeMinutes
+        List<String> ingredientsToExclude
 ) {}

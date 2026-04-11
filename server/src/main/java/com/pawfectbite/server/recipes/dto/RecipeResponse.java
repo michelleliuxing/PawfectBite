@@ -19,7 +19,6 @@ public record RecipeResponse(
         int estimatedCalories,
         String feedingPortions,
         List<String> shoppingList,
-        int prepTimeMinutes,
         String storageGuidance,
         List<String> cautionNotes,
         RiskLevel riskLevel,
@@ -35,7 +34,7 @@ public record RecipeResponse(
                 r.id(), r.petId(), r.petName(), r.title(), r.description(),
                 r.ingredients().stream().map(i -> new IngredientDto(i.name(), i.amount(), i.unit(), i.notes())).toList(),
                 r.steps(), r.estimatedCalories(), r.feedingPortions(),
-                r.shoppingList(), r.prepTimeMinutes(), r.storageGuidance(), r.cautionNotes(),
+                r.shoppingList(), r.storageGuidance(), r.cautionNotes(),
                 r.riskLevel(),
                 r.warnings().stream().map(w -> new WarningDto(w.ruleType(), w.message(), w.severity())).toList(),
                 r.status(), r.createdAt()
