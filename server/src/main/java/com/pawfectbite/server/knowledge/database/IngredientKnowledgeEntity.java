@@ -29,7 +29,10 @@ public class IngredientKnowledgeEntity extends AuditableEntity {
     @Column(name = "content_text", nullable = false, columnDefinition = "TEXT")
     private String contentText;
 
-    protected IngredientKnowledgeEntity() {}
+    @Column(name = "embedding", columnDefinition = "vector(1536)")
+    private String embedding;
+
+    public IngredientKnowledgeEntity() {}
 
     public IngredientKnowledge toDomain() {
         return new IngredientKnowledge(id, name, category, List.of(), safetyNotes, nutritionInfo, contentText);
@@ -38,4 +41,6 @@ public class IngredientKnowledgeEntity extends AuditableEntity {
     public UUID getId() { return id; }
     public String getName() { return name; }
     public String getContentText() { return contentText; }
+    public String getEmbedding() { return embedding; }
+    public void setEmbedding(String embedding) { this.embedding = embedding; }
 }

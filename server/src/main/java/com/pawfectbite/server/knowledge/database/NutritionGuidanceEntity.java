@@ -26,12 +26,18 @@ public class NutritionGuidanceEntity extends AuditableEntity {
     @Column(length = 500)
     private String source;
 
-    protected NutritionGuidanceEntity() {}
+    @Column(name = "embedding", columnDefinition = "vector(1536)")
+    private String embedding;
+
+    public NutritionGuidanceEntity() {}
 
     public NutritionGuidance toDomain() {
         return new NutritionGuidance(id, title, category, species, contentText, source);
     }
 
     public UUID getId() { return id; }
+    public String getTitle() { return title; }
     public String getContentText() { return contentText; }
+    public String getEmbedding() { return embedding; }
+    public void setEmbedding(String embedding) { this.embedding = embedding; }
 }

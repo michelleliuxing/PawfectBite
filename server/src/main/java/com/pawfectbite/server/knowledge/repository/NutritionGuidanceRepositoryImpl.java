@@ -25,7 +25,19 @@ public class NutritionGuidanceRepositoryImpl implements NutritionGuidanceReposit
 
     @Override
     public List<NutritionGuidance> searchByEmbedding(float[] embedding, int limit) {
-        // Vector search will be implemented when pgvector native queries are added
-        return List.of();
+        String vectorString = toVectorString(embedding);
+        return jpa.findNearestByEmbedding(vectorString, limit).stream()
+                .map(NutritionGuidanceEntity::toDomain)
+                .toList();
+    }
+
+    private String toVectorString(float[] embedding) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < embedding.length; i++) {
+            if (i > 0) sb.append(",");
+            sb.append(embedding[i]);
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }

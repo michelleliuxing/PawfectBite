@@ -21,7 +21,9 @@ import java.util.Map;
 public class OpenAIClient {
 
     private static final Logger log = LoggerFactory.getLogger(OpenAIClient.class);
-    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+    private static final String CHAT_API_URL = "https://api.openai.com/v1/chat/completions";
+    private static final String EMBEDDING_API_URL = "https://api.openai.com/v1/embeddings";
+    private static final String EMBEDDING_MODEL = "text-embedding-3-small";
 
     private final OpenAIProperties properties;
     private final ObjectMapper objectMapper;
@@ -46,7 +48,7 @@ public class OpenAIClient {
             );
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
+                    .uri(URI.create(CHAT_API_URL))
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + properties.apiKey())
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body)))
@@ -64,6 +66,41 @@ public class OpenAIClient {
         } catch (Exception e) {
             log.error("Failed to call OpenAI API", e);
             throw new RuntimeException("LLM call failed", e);
+        }
+    }
+
+    public float[] generateEmbedding(String text) {
+        try {
+            Map<String, Object> body = Map.of(
+                    "model", EMBEDDING_MODEL,
+                    "input", text
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(EMBEDDING_API_URL))
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + properties.apiKey())
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body)))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                log.error("Embedding API error: status={}, body={}", response.statusCode(), response.body());
+                throw new RuntimeException("Embedding API returned status " + response.statusCode());
+            }
+
+            JsonNode root = objectMapper.readTree(response.body());
+            JsonNode embeddingArray = root.path("data").get(0).path("embedding");
+
+            float[] embedding = new float[embeddingArray.size()];
+            for (int i = 0; i < embeddingArray.size(); i++) {
+                embedding[i] = (float) embeddingArray.get(i).asDouble();
+            }
+            return embedding;
+        } catch (Exception e) {
+            log.error("Failed to generate embedding", e);
+            throw new RuntimeException("Embedding generation failed", e);
         }
     }
 }
