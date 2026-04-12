@@ -9,6 +9,7 @@ import com.pawfectbite.server.recipes.domain.*;
 import com.pawfectbite.server.recipes.dto.RecipeGenerateRequest;
 import com.pawfectbite.server.recipes.dto.RecipePrecheckRequest;
 import com.pawfectbite.server.recipes.repository.RecipeRepository;
+import com.pawfectbite.server.recipes.repository.RecipeRequestRepository;
 import com.pawfectbite.server.safety.application.SafetyService;
 import com.pawfectbite.server.safety.domain.SafetyResult;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class RecipeGenerationService {
     private final LLMRecipeWriter llmWriter;
     private final RecipeValidator recipeValidator;
     private final RecipeRepository recipeRepository;
+    private final RecipeRequestRepository recipeRequestRepository;
 
     public RecipeGenerationService(
             PetService petService,
@@ -39,7 +41,8 @@ public class RecipeGenerationService {
             RecipePlanBuilder planBuilder,
             LLMRecipeWriter llmWriter,
             RecipeValidator recipeValidator,
-            RecipeRepository recipeRepository
+            RecipeRepository recipeRepository,
+            RecipeRequestRepository recipeRequestRepository
     ) {
         this.petService = petService;
         this.safetyService = safetyService;
@@ -47,6 +50,7 @@ public class RecipeGenerationService {
         this.llmWriter = llmWriter;
         this.recipeValidator = recipeValidator;
         this.recipeRepository = recipeRepository;
+        this.recipeRequestRepository = recipeRequestRepository;
     }
 
     public SafetyResult precheck(UUID userId, RecipePrecheckRequest request) {
@@ -79,18 +83,26 @@ public class RecipeGenerationService {
             throw new SafetyBlockedException(reasons);
         }
 
-        // Step 5: Build recipe plan (includes knowledge retrieval)
+        // Step 5: Log the request
+        RecipeRequest recipeRequest = recipeRequestRepository.save(new RecipeRequest(
+                null, userId, pet.id(), request.goal(),
+                ingredientsToInclude, ingredientsToExclude,
+                safetyResult.riskLevel(), safetyResult.warnings(), null
+        ));
+        log.info("Recipe request logged: id={}", recipeRequest.id());
+
+        // Step 6: Build recipe plan (includes knowledge retrieval)
         RecipePlan plan = planBuilder.build(
                 pet, request.goal(), ingredientsToInclude, ingredientsToExclude,
                 safetyResult
         );
 
-        // Step 6: LLM generation
+        // Step 7: LLM generation
         StructuredRecipeOutput llmOutput = llmWriter.generateRecipe(plan);
 
-        // Step 7: Map to domain and validate
+        // Step 8: Map to domain and validate
         GeneratedRecipe recipe = new GeneratedRecipe(
-                null, userId, pet.id(), pet.name(), null,
+                null, userId, pet.id(), pet.name(), recipeRequest.id(),
                 llmOutput.title(), llmOutput.description(),
                 llmOutput.ingredients().stream()
                         .map(i -> new GeneratedRecipe.RecipeIngredient(i.name(), i.amount(), i.unit(), i.notes()))
@@ -104,9 +116,10 @@ public class RecipeGenerationService {
 
         recipeValidator.validate(recipe);
 
-        // Step 8: Persist
+        // Step 9: Persist
         GeneratedRecipe saved = recipeRepository.save(recipe);
-        log.info("Recipe generated and saved: id={}, title={}", saved.id(), saved.title());
+        log.info("Recipe generated and saved: id={}, title={}, requestId={}",
+                saved.id(), saved.title(), recipeRequest.id());
 
         return saved;
     }
