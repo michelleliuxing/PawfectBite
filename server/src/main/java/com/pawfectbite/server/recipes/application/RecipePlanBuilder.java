@@ -28,7 +28,7 @@ public class RecipePlanBuilder {
             List<String> ingredientsToExclude,
             SafetyResult safetyResult
     ) {
-        RetrievedKnowledge knowledge = knowledgeService.retrieve(pet, ingredientsToInclude);
+        RetrievedKnowledge knowledge = knowledgeService.retrieve(pet, ingredientsToInclude, goal);
 
         List<String> knowledgeContext = new ArrayList<>();
         for (IngredientKnowledge ik : knowledge.ingredients()) {
