@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Plus, Dog, Cat, Heart, Info } from "lucide-react";
 import { usePets } from "@/lib/hooks/use-pets";
 import { useSession } from "next-auth/react";
@@ -14,7 +14,7 @@ export default function PetsPage() {
   const { data: pets, isLoading: isPetsLoading, error } = usePets({ enabled: isAuthenticated });
   const isLoading = status === "loading" || (isAuthenticated && isPetsLoading);
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -22,7 +22,7 @@ export default function PetsPage() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0, scale: 0.95 },
     visible: {
       y: 0,

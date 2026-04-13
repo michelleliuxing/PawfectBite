@@ -3,14 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Heart, ShieldCheck, Sparkles, Utensils, ArrowRight } from "lucide-react";
 import { MainNavBar } from "@/components/layout/main-nav-bar";
 
 export default function LandingPage() {
   const { data: session } = useSession();
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
@@ -18,7 +18,7 @@ export default function LandingPage() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: { 
       y: 0, 

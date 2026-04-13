@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { PageHeader } from "@/components/layout/page-header";
 import { StepSelectPet } from "@/components/recipes/recipe-wizard/step-select-pet";
 import { StepPreferences } from "@/components/recipes/recipe-wizard/step-preferences";
 import { StepPrecheckResult } from "@/components/recipes/recipe-wizard/step-precheck-result";

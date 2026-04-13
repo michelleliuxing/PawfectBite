@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Plus, ChefHat, Utensils } from "lucide-react";
 import { useRecipes } from "@/lib/hooks/use-recipes";
 import { usePets } from "@/lib/hooks/use-pets";
@@ -18,7 +18,7 @@ export default function RecipesPage() {
   const isLoading = status === "loading" || (isAuthenticated && isRecipesLoading);
   const error = recipesError || petsError;
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
@@ -26,7 +26,7 @@ export default function RecipesPage() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: { 
       y: 0, 
@@ -164,7 +164,7 @@ export default function RecipesPage() {
                   </p>
                   <div className="flex flex-wrap gap-2 mt-auto">
                     <span className="text-xs font-bold bg-[#F4D06F]/30 text-[#4A3B32] px-2 py-1 rounded-md border border-[#4A3B32]/20">
-                      {recipe.calories} kcal
+                      {recipe.estimatedCalories} kcal
                     </span>
                   </div>
                 </motion.div>
