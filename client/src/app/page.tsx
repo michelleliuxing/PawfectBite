@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Heart, ShieldCheck, Sparkles, Utensils, ArrowRight } from "lucide-react";
@@ -73,21 +74,25 @@ export default function LandingPage() {
             </motion.p>
             
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <motion.button 
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
-                className="group flex items-center justify-center gap-3 bg-[#E88D72] text-white px-8 py-4 rounded-full font-black text-lg border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] transition-all"
-              >
-                Create Pet Profile
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
-                className="flex items-center justify-center gap-3 bg-white text-[#4A3B32] px-8 py-4 rounded-full font-bold text-lg border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] transition-all hover:bg-[#FFF9F2]"
-              >
-                See How It Works
-              </motion.button>
+              <Link href="/pets/new" passHref>
+                <motion.button 
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
+                  className="group flex items-center justify-center gap-3 bg-[#E88D72] text-white px-8 py-4 rounded-full font-black text-lg border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] transition-all w-full"
+                >
+                  Create Pet Profile
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+              </Link>
+              <Link href="#how-it-works" passHref>
+                <motion.button 
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
+                  className="flex items-center justify-center gap-3 bg-white text-[#4A3B32] px-8 py-4 rounded-full font-bold text-lg border-4 border-[#4A3B32] shadow-[6px_6px_0px_#4A3B32] transition-all hover:bg-[#FFF9F2] w-full"
+                >
+                  See How It Works
+                </motion.button>
+              </Link>
             </motion.div>
           </div>
 
@@ -115,6 +120,7 @@ export default function LandingPage() {
 
         {/* Features / How it Works */}
         <motion.section 
+          id="how-it-works"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -185,14 +191,16 @@ export default function LandingPage() {
             <p className="text-xl font-bold text-[#4A3B32] mb-10 bg-white/50 px-6 py-2 rounded-full inline-block border-2 border-[#4A3B32]">
               Join thousands of happy, healthy pets.
             </p>
-            <motion.button 
-              whileHover={{ scale: 1.05, y: -4, rotate: 1 }}
-              whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
-              className="bg-[#F7B2B7] text-[#4A3B32] px-10 py-5 rounded-full font-black text-xl border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] transition-all flex items-center gap-3"
-            >
-              <Heart fill="#4A3B32" className="w-6 h-6" />
-              Start For Free
-            </motion.button>
+            <Link href="/pets/new" passHref>
+              <motion.button 
+                whileHover={{ scale: 1.05, y: -4, rotate: 1 }}
+                whileTap={{ scale: 0.95, y: 4, boxShadow: "0px 0px 0px #4A3B32" }}
+                className="bg-[#F7B2B7] text-[#4A3B32] px-10 py-5 rounded-full font-black text-xl border-4 border-[#4A3B32] shadow-[8px_8px_0px_#4A3B32] transition-all flex items-center gap-3"
+              >
+                <Heart fill="#4A3B32" className="w-6 h-6" />
+                Start For Free
+              </motion.button>
+            </Link>
           </div>
         </motion.section>
 
