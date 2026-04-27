@@ -32,6 +32,8 @@ export const authConfig: NextAuthConfig = {
             const body = await res.json();
             token.accessToken = body.data.token;
             token.userId = body.data.user.id;
+            // Store expiry as Unix ms — backend issues 24h tokens (86400000ms)
+            token.accessTokenExpiresAt = Date.now() + 86_400_000;
           }
         } catch {
           console.error("Failed to exchange token with backend");
@@ -45,6 +47,9 @@ export const authConfig: NextAuthConfig = {
       }
       if (token.userId) {
         session.userId = token.userId as string;
+      }
+      if (token.accessTokenExpiresAt) {
+        session.accessTokenExpiresAt = token.accessTokenExpiresAt as number;
       }
       return session;
     },

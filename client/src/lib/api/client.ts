@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import { type ApiResponse } from "@/lib/types/api.types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
@@ -23,6 +24,11 @@ class ApiClient {
       ...options,
       headers,
     });
+
+    if (response.status === 401) {
+      await signOut({ redirectTo: "/sign-in" });
+      throw new ApiClientError("UNAUTHORIZED", "Session expired. Please sign in again.", 401);
+    }
 
     const text = await response.text();
     const body: ApiResponse<T> = text ? JSON.parse(text) : { data: null as unknown as T };
@@ -71,6 +77,11 @@ class ApiClient {
       headers,
       body: formData,
     });
+
+    if (response.status === 401) {
+      await signOut({ redirectTo: "/sign-in" });
+      throw new ApiClientError("UNAUTHORIZED", "Session expired. Please sign in again.", 401);
+    }
 
     const text = await response.text();
     const body: ApiResponse<T> = text ? JSON.parse(text) : { data: null as unknown as T };
